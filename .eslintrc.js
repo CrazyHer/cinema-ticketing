@@ -8,6 +8,9 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     'react/jsx-props-no-spreading': 'off',
+    'no-console': 'off',
+    'promise/catch-or-return': 'off',
+    'promise/always-return': 'off',
   },
   parserOptions: {
     ecmaVersion: 2020,

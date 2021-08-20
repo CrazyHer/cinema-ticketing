@@ -1,4 +1,4 @@
-/* md5: 05a080f25600808c6b8aa65884f78cc6 */
+/* md5: 9fa041b137e85c846b923a5a283321b8 */
 /* Rap仓库id: 288782 */
 /* Rapper版本: 1.2.2 */
 /* eslint-disable */
@@ -14,71 +14,80 @@ import * as commonLib from 'rap/runtime/commonLib'
 
 export interface IModels {
   /**
-   * 接口名：示例接口
-   * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2048371
+   * 接口名：登录
+   * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2053034
    */
-  'GET/example/1628934364823': {
+  'POST/login': {
     Req: {
-      /**
-       * 请求属性示例
-       */
-      foo?: string
+      username: string
+      password: string
     }
     Res: {
-      /**
-       * 字符串属性示例
-       */
-      string: string
-      /**
-       * 数字属性示例
-       */
-      number: number
-      /**
-       * 布尔属性示例
-       */
-      boolean: boolean
-      /**
-       * 正则属性示例
-       */
-      regexp: string
-      /**
-       * 函数属性示例
-       */
-      function: string
-      /**
-       * 数组属性示例
-       */
-      array: {
-        /**
-         * 数组元素示例
-         */
-        foo: number
-        /**
-         * 数组元素示例
-         */
-        bar: string
-      }[]
-      /**
-       * 自定义数组元素示例
-       */
-      items: any[]
-      /**
-       * 对象属性示例
-       */
-      object: {
-        /**
-         * 对象属性示例
-         */
-        foo: number
-        /**
-         * 对象属性示例
-         */
-        bar: string
+      code: number
+      message: string
+      data: {
+        token: string
       }
-      /**
-       * 占位符示例
-       */
-      placeholder: string
+    }
+  }
+
+  /**
+   * 接口名：获取用户信息
+   * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2053037
+   */
+  'GET/getuserinfo': {
+    Req: {}
+    Res: {
+      code: number
+      message: string
+      data: {
+        character: string
+        name: string
+        avatarURL: string
+        phone: string
+        email: string
+        birthday: number
+        address: string[]
+      }
+    }
+  }
+
+  /**
+   * 接口名：注册
+   * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2053327
+   */
+  'POST/register': {
+    Req: {
+      username: string
+      password: string
+    }
+    Res: {
+      code: number
+      message: string
+      data: {}
+    }
+  }
+
+  /**
+   * 接口名：获取热映电影
+   * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2055387
+   */
+  'GET/gethotfilms': {
+    Req: {
+      address: string[]
+    }
+    Res: {
+      code: number
+      message: string
+      data: {
+        posterURL: string
+        name: string
+        popularity: number
+        /**
+         * 电影唯一ID
+         */
+        IMDb: string
+      }[]
     }
   }
 }
@@ -86,7 +95,10 @@ export interface IModels {
 type ResSelector<T> = T
 
 export interface IResponseTypes {
-  'GET/example/1628934364823': ResSelector<IModels['GET/example/1628934364823']['Res']>
+  'POST/login': ResSelector<IModels['POST/login']['Res']>
+  'GET/getuserinfo': ResSelector<IModels['GET/getuserinfo']['Res']>
+  'POST/register': ResSelector<IModels['POST/register']['Res']>
+  'GET/gethotfilms': ResSelector<IModels['GET/gethotfilms']['Res']>
 }
 
 export function createFetch(fetchConfig: commonLib.RequesterOption, extraConfig?: {fetchType?: commonLib.FetchType}) {
@@ -97,18 +109,63 @@ export function createFetch(fetchConfig: commonLib.RequesterOption, extraConfig?
 
   return {
     /**
-     * 接口名：示例接口
-     * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2048371
+     * 接口名：登录
+     * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2053034
      * @param req 请求参数
      * @param extra 请求配置项
      */
-    'GET/example/1628934364823': (req?: IModels['GET/example/1628934364823']['Req'], extra?: commonLib.IExtra) => {
+    'POST/login': (req?: IModels['POST/login']['Req'], extra?: commonLib.IExtra) => {
       return rapperFetch({
-        url: '/example/1628934364823',
+        url: '/login',
+        method: 'POST',
+        params: req,
+        extra,
+      }) as Promise<IResponseTypes['POST/login']>
+    },
+
+    /**
+     * 接口名：获取用户信息
+     * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2053037
+     * @param req 请求参数
+     * @param extra 请求配置项
+     */
+    'GET/getuserinfo': (req?: IModels['GET/getuserinfo']['Req'], extra?: commonLib.IExtra) => {
+      return rapperFetch({
+        url: '/getuserinfo',
         method: 'GET',
         params: req,
         extra,
-      }) as Promise<IResponseTypes['GET/example/1628934364823']>
+      }) as Promise<IResponseTypes['GET/getuserinfo']>
+    },
+
+    /**
+     * 接口名：注册
+     * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2053327
+     * @param req 请求参数
+     * @param extra 请求配置项
+     */
+    'POST/register': (req?: IModels['POST/register']['Req'], extra?: commonLib.IExtra) => {
+      return rapperFetch({
+        url: '/register',
+        method: 'POST',
+        params: req,
+        extra,
+      }) as Promise<IResponseTypes['POST/register']>
+    },
+
+    /**
+     * 接口名：获取热映电影
+     * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2055387
+     * @param req 请求参数
+     * @param extra 请求配置项
+     */
+    'GET/gethotfilms': (req?: IModels['GET/gethotfilms']['Req'], extra?: commonLib.IExtra) => {
+      return rapperFetch({
+        url: '/gethotfilms',
+        method: 'GET',
+        params: req,
+        extra,
+      }) as Promise<IResponseTypes['GET/gethotfilms']>
     },
   }
 }

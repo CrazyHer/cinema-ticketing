@@ -5,13 +5,14 @@
  * electron renderer process from here and communicate with the other processes
  * through IPC.
  *
- * When running `yarn build` or `yarn build-main`, this file is compiled to
- * `./src/main.prod.js` using webpack. This gives us some performance wins.
+ * When running `yarn build` or `yarn build:main`, this file is compiled to
+ * `./src/main.js` using webpack. This gives us some performance wins.
  */
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 import path from 'path';
-import { app, BrowserWindow, Menu, shell } from 'electron';
+import { app, BrowserWindow, shell } from 'electron';
+import { resolveHtmlPath } from './util';
 
 let mainWindow: BrowserWindow | null = null;
 
@@ -20,31 +21,17 @@ if (process.env.NODE_ENV === 'production') {
   sourceMapSupport.install();
 }
 
-if (
-  process.env.NODE_ENV === 'development' ||
-  process.env.DEBUG_PROD === 'true'
-) {
+const isDevelopment =
+  process.env.NODE_ENV === 'development' || process.env.DEBUG_PROD === 'true';
+
+if (isDevelopment) {
   require('electron-debug')();
 }
-
-// 不安装electron调试插件
-// const installExtensions = async () => {
-//   const installer = require('electron-devtools-installer');
-//   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
-//   const extensions = ['REACT_DEVELOPER_TOOLS'];
-
-//   return installer
-//     .default(
-//       extensions.map((name) => installer[name]),
-//       forceDownload
-//     )
-//     .catch(console.log);
-// };
 
 const createWindow = async () => {
   const RESOURCES_PATH = app.isPackaged
     ? path.join(process.resourcesPath, 'assets')
-    : path.join(__dirname, '../assets');
+    : path.join(__dirname, '../../assets');
 
   const getAssetPath = (...paths: string[]): string => {
     return path.join(RESOURCES_PATH, ...paths);
@@ -52,19 +39,21 @@ const createWindow = async () => {
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1280,
-    height: 720,
+    width: 1024,
+    height: 728,
     resizable: false,
     icon: getAssetPath('icon.png'),
     webPreferences: {
+      //    webSecurity: false,
       nodeIntegration: true,
+      contextIsolation: false,
     },
   });
 
-  mainWindow.loadURL(`file://${__dirname}/index.html`);
-
+  mainWindow.loadURL(resolveHtmlPath('index.html'));
+  mainWindow.setMenu(null);
   // @TODO: Use 'ready-to-show' event
-  //        https://github.com/electron/electron/blob/master/docs/api/browser-window.md#using-ready-to-show-event
+  //        https://github.com/electron/electron/blob/main/docs/api/browser-window.md#using-ready-to-show-event
   mainWindow.webContents.on('did-finish-load', () => {
     if (!mainWindow) {
       throw new Error('"mainWindow" is not defined');
@@ -88,8 +77,6 @@ const createWindow = async () => {
   });
 };
 
-Menu.setApplicationMenu(null);
-
 /**
  * Add event listeners...
  */
@@ -102,10 +89,10 @@ app.on('window-all-closed', () => {
   }
 });
 
+app.whenReady().then(createWindow).catch(console.log);
+
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) createWindow();
 });
-
-app.whenReady().then(createWindow).catch(console.log);

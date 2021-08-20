@@ -16,7 +16,7 @@ import FilmDetail from './pages/user/filmDetail/FilmDetail';
 import UserIndex from './pages/user/index/Index';
 import UserOrders from './pages/user/orders/Orders';
 import ProfileEdit from './pages/user/profileEdit/ProfileEdit';
-import Remark from './pages/user/remark/Remark';
+// import Remark from './pages/user/remark/Remark';
 import Ticketing from './pages/user/ticketing/Ticketing';
 import Arrangements from './pages/admin/arrangements/Arrangements';
 import CinemaEdit from './pages/admin/cinemaEdit/CinemaEdit';
@@ -35,14 +35,14 @@ function App() {
             <Switch>
               <Route path="/login" component={Login} />
 
-              <Route path="/user/" exact component={UserIndex} />
+              <Route path="/user" exact component={UserIndex} />
               <Route path="/user/filmdetail" component={FilmDetail} />
               <Route path="/user/orders" component={UserOrders} />
               <Route path="/user/profileedit" component={ProfileEdit} />
-              <Route path="/user/remark" component={Remark} />
+              {/* <Route path="/user/remark" component={Remark} /> */}
               <Route path="/user/ticketing" component={Ticketing} />
 
-              <Route path="/admin/" exact component={AdminIndex} />
+              <Route path="/admin" exact component={AdminIndex} />
               <Route path="/admin/arrangements" component={Arrangements} />
               <Route path="/admin/cinemaedit" component={CinemaEdit} />
               <Route path="/admin/films" component={Films} />

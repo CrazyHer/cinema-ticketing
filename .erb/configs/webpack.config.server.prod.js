@@ -1,4 +1,5 @@
 import path from 'path';
+import webpackPaths from './webpack.paths.js';
 
 const { name } = require('../../package.json');
 module.exports = {
@@ -8,7 +9,7 @@ module.exports = {
   },
   target: 'node',
   output: {
-    path: path.resolve(__dirname, '../../src/dist'),
+    path: webpackPaths.distServerPath,
     filename: `${name}-server.js`,
   },
   resolve: {

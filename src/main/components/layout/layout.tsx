@@ -1,9 +1,9 @@
-import { Avatar, Button, Dropdown, Layout, Menu } from 'antd';
+import { Avatar, Button, Dropdown, Layout, Menu, message } from 'antd';
 import { inject, observer } from 'mobx-react';
 import React, { useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import User from '../../mobxStore/user';
-import './Layout.module.css';
+import Style from './Layout.module.css';
 
 const { Header, Content } = Layout;
 
@@ -16,6 +16,10 @@ const HLayout = (props: any) => {
     // 检查登录状态，若未登录则跳转登录页面
     if (user.token === '' && pathname !== '/login') {
       history.replace('/login');
+    }
+    if (user.character !== 'admin' && pathname.match('admin')) {
+      history.replace('/login');
+      message.warning('您无权访问此页面');
     }
   }, [pathname, user.token]);
 
@@ -33,26 +37,36 @@ const HLayout = (props: any) => {
           backgroundColor: 'white',
           borderBottom: 'solid 1px #dbdbdb',
           boxShadow: '0 2.5px 0 #f4f5f7',
-          marginBottom: '33.25px',
           height: '67.5px',
+          width: '100%',
+          position: 'fixed',
+          zIndex: 99,
         }}
       >
-        <div className="header">
-          <div className="title">
+        <div className={Style.header}>
+          <div className={Style.title}>
             <img alt="LOGO" />
             <h1>
-              <b>犬眼电影购票系统</b>
+              <b>山票票电影购票系统</b>
             </h1>
           </div>
 
           <div>
             <Dropdown
+              overlayStyle={{ position: 'fixed' }}
               overlay={
                 <Menu>
-                  <Menu.Item>
-                    <Button onClick={() => {}} type="text">
+                  <Menu.Item key="editUserInfo">
+                    <Button
+                      onClick={() => {
+                        history.push('/user/profileedit');
+                      }}
+                      type="text"
+                    >
                       修改个人信息
                     </Button>
+                  </Menu.Item>
+                  <Menu.Item key="logoff">
                     <Button onClick={handleLogoff} type="text">
                       退出登录
                     </Button>
@@ -65,15 +79,15 @@ const HLayout = (props: any) => {
                   style={{ marginRight: '20px' }}
                   shape="circle"
                   size="large"
-                  icon="U"
+                  icon={<img src={user.avatarURL} alt="头像" />}
                 />
-                <div className="user-tag">用户</div>
+                <div className={Style['user-tag']}>{user.name}</div>
               </div>
             </Dropdown>
           </div>
         </div>
       </Header>
-      <Content>{children}</Content>
+      <Content style={{ marginTop: '80px' }}>{children}</Content>
     </Layout>
   );
 };

@@ -1,0 +1,20 @@
+.contentStyle {
+  height: 160px;
+  color: #fff;
+  line-height: 160px;
+  text-align: center;
+  background: #364d79;
+}
+.carousel {
+  width: 95%;
+  margin: 0 auto;
+}
+
+:global(.ant-carousel:hover .slick-prev) {
+  font-size: inherit;
+  color: black;
+}
+:global(.ant-carousel:hover .slick-next) {
+  font-size: inherit;
+  color: black;
+}

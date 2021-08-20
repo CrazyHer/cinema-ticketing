@@ -10,14 +10,14 @@
  * Rap仓库 地址: http://rap2.taobao.org/repository/editor?id=288782
  */
 
-import { createFetch, IModels } from './request';
-import * as commonLib from 'rap/runtime/commonLib';
+import {createFetch, IModels} from './request'
+import * as commonLib from 'rap/runtime/commonLib'
 
-const { defaultFetch } = commonLib;
-let fetch = createFetch({}, { fetchType: commonLib.FetchType.BASE });
+const {defaultFetch} = commonLib
+let fetch = createFetch({}, {fetchType: commonLib.FetchType.BASE})
 
 export const overrideFetch = (fetchConfig: commonLib.RequesterOption) => {
-  fetch = createFetch(fetchConfig, { fetchType: commonLib.FetchType.AUTO });
-};
-export { fetch, createFetch, defaultFetch };
-export type Models = IModels;
+  fetch = createFetch(fetchConfig, {fetchType: commonLib.FetchType.AUTO})
+}
+export {fetch, createFetch, defaultFetch}
+export type Models = IModels
