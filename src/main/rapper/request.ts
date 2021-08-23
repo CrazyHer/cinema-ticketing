@@ -1,4 +1,4 @@
-/* md5: 9fa041b137e85c846b923a5a283321b8 */
+/* md5: d57b3511507fd30f160fadd51cedd557 */
 /* Rap仓库id: 288782 */
 /* Rapper版本: 1.2.2 */
 /* eslint-disable */
@@ -46,8 +46,14 @@ export interface IModels {
         avatarURL: string
         phone: string
         email: string
-        birthday: number
         address: string[]
+        /**
+         * 目前开放的城市
+         */
+        availableCities: {
+          province: string
+          cities: string[]
+        }[]
       }
     }
   }
@@ -90,6 +96,85 @@ export interface IModels {
       }[]
     }
   }
+
+  /**
+   * 接口名：修改个人信息
+   * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2056760
+   */
+  'POST/editprofile': {
+    Req: {
+      imgSrc: string
+      name: string
+      email: string
+      address: string[]
+      phone: string
+    }
+    Res: {
+      code: number
+      message: string
+      data: string
+    }
+  }
+
+  /**
+   * 接口名：获取电影详情
+   * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2057993
+   */
+  'GET/getfilminfo': {
+    Req: {
+      IMDb: string
+    }
+    Res: {
+      code: number
+      message: string
+      data: {
+        arrangements: {
+          cinema: string
+          hall: string
+          time: string
+          /**
+           * 0为禁用，1为空闲，2为占用
+           */
+          seats: {
+            [k: string]: any
+          }[]
+          price: number
+          arrangementID: number
+        }[]
+        zhName: string
+        enName: string
+        type: string
+        country: string
+        duration: string
+        IMDb: string
+        actor: string
+        boxOffice: number
+        posterURL: string
+        photosURL: string[]
+        breif: string
+      }
+    }
+  }
+
+  /**
+   * 接口名：支付订单
+   * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2058034
+   */
+  'POST/pay': {
+    Req: {
+      arrangementID: number
+      selectedSeats: {
+        row: number
+        line: number
+      }[]
+      price: number
+    }
+    Res: {
+      code: number
+      message: string
+      data: string
+    }
+  }
 }
 
 type ResSelector<T> = T
@@ -99,6 +184,9 @@ export interface IResponseTypes {
   'GET/getuserinfo': ResSelector<IModels['GET/getuserinfo']['Res']>
   'POST/register': ResSelector<IModels['POST/register']['Res']>
   'GET/gethotfilms': ResSelector<IModels['GET/gethotfilms']['Res']>
+  'POST/editprofile': ResSelector<IModels['POST/editprofile']['Res']>
+  'GET/getfilminfo': ResSelector<IModels['GET/getfilminfo']['Res']>
+  'POST/pay': ResSelector<IModels['POST/pay']['Res']>
 }
 
 export function createFetch(fetchConfig: commonLib.RequesterOption, extraConfig?: {fetchType?: commonLib.FetchType}) {
@@ -166,6 +254,51 @@ export function createFetch(fetchConfig: commonLib.RequesterOption, extraConfig?
         params: req,
         extra,
       }) as Promise<IResponseTypes['GET/gethotfilms']>
+    },
+
+    /**
+     * 接口名：修改个人信息
+     * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2056760
+     * @param req 请求参数
+     * @param extra 请求配置项
+     */
+    'POST/editprofile': (req?: IModels['POST/editprofile']['Req'], extra?: commonLib.IExtra) => {
+      return rapperFetch({
+        url: '/editprofile',
+        method: 'POST',
+        params: req,
+        extra,
+      }) as Promise<IResponseTypes['POST/editprofile']>
+    },
+
+    /**
+     * 接口名：获取电影详情
+     * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2057993
+     * @param req 请求参数
+     * @param extra 请求配置项
+     */
+    'GET/getfilminfo': (req?: IModels['GET/getfilminfo']['Req'], extra?: commonLib.IExtra) => {
+      return rapperFetch({
+        url: '/getfilminfo',
+        method: 'GET',
+        params: req,
+        extra,
+      }) as Promise<IResponseTypes['GET/getfilminfo']>
+    },
+
+    /**
+     * 接口名：支付订单
+     * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2058034
+     * @param req 请求参数
+     * @param extra 请求配置项
+     */
+    'POST/pay': (req?: IModels['POST/pay']['Req'], extra?: commonLib.IExtra) => {
+      return rapperFetch({
+        url: '/pay',
+        method: 'POST',
+        params: req,
+        extra,
+      }) as Promise<IResponseTypes['POST/pay']>
     },
   }
 }

@@ -16,13 +16,14 @@ export default class User {
   avatarURL: string;
   phone: string;
   email: string;
-  birthday: number;
   address: string[];
+  availableCities: Models['GET/getuserinfo']['Res']['data']['availableCities'];
 
   constructor() {
     makeAutoObservable(this);
 
     this.token = localStorage.getItem('token') || '';
+    customFetch(this.token);
 
     const formData = localStorage.getItem('loginFormData');
     if (formData) {
@@ -35,9 +36,8 @@ export default class User {
     this.avatarURL = '';
     this.phone = '';
     this.email = '';
-    this.birthday = 1629000000000;
     this.address = ['', ''];
-
+    this.availableCities = [];
     customFetch(this.token);
   }
 
@@ -68,8 +68,8 @@ export default class User {
     this.avatarURL = data.avatarURL;
     this.phone = data.phone;
     this.email = data.email;
-    this.birthday = data.birthday;
     this.address = data.address;
     this.character = data.character as 'user' | 'admin' | undefined;
+    this.availableCities = data.availableCities;
   };
 }

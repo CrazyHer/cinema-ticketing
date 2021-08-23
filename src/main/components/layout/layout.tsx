@@ -1,8 +1,10 @@
 import { Avatar, Button, Dropdown, Layout, Menu, message } from 'antd';
 import { inject, observer } from 'mobx-react';
 import React, { useEffect } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
+import { LeftOutlined } from '@ant-design/icons';
 import User from '../../mobxStore/user';
+import { fetch } from '../../rapper';
 import Style from './Layout.module.css';
 
 const { Header, Content } = Layout;
@@ -20,6 +22,14 @@ const HLayout = (props: any) => {
     if (user.character !== 'admin' && pathname.match('admin')) {
       history.replace('/login');
       message.warning('您无权访问此页面');
+    }
+    if (user.token && !user.name) {
+      // 认为用户信息丢失
+      fetch['GET/getuserinfo']().then((res) => {
+        if (res.code === 0) {
+          user.setUserInfo(res.data);
+        } else history.replace('/login');
+      });
     }
   }, [pathname, user.token]);
 
@@ -45,6 +55,13 @@ const HLayout = (props: any) => {
       >
         <div className={Style.header}>
           <div className={Style.title}>
+            {pathname !== '/user' && pathname !== '/admin' && (
+              <Button
+                type="link"
+                icon={<LeftOutlined />}
+                onClick={() => history.goBack()}
+              />
+            )}
             <img alt="LOGO" />
             <h1>
               <b>山票票电影购票系统</b>
