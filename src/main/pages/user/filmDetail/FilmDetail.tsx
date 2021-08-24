@@ -29,7 +29,7 @@ interface IRecordData {
   seats: number[][];
   price: number;
   arrangementID: number;
-  key: string;
+  key: number;
 }
 
 const FilmDetail = (props: any) => {

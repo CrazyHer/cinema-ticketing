@@ -1,4 +1,4 @@
-/* md5: d57b3511507fd30f160fadd51cedd557 */
+/* md5: 895a57f12f65c949d54372144435347e */
 /* Rap仓库id: 288782 */
 /* Rapper版本: 1.2.2 */
 /* eslint-disable */
@@ -175,6 +175,48 @@ export interface IModels {
       data: string
     }
   }
+
+  /**
+   * 接口名：获取订单列表
+   * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2059118
+   */
+  'GET/getmyorders': {
+    Req: {}
+    Res: {
+      code: number
+      message: string
+      data: {
+        cinema: string
+        hall: string
+        time: string
+        selectedSeats: {
+          row: number
+          line: number
+        }[]
+        totalPrice: number
+        /**
+         * 0已支付，1已完成，2已退票
+         */
+        status: number
+        orderID: number
+      }[]
+    }
+  }
+
+  /**
+   * 接口名：退票
+   * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2059123
+   */
+  'GET/refund': {
+    Req: {
+      orderID: number
+    }
+    Res: {
+      code: number
+      message: string
+      data: {}
+    }
+  }
 }
 
 type ResSelector<T> = T
@@ -187,6 +229,8 @@ export interface IResponseTypes {
   'POST/editprofile': ResSelector<IModels['POST/editprofile']['Res']>
   'GET/getfilminfo': ResSelector<IModels['GET/getfilminfo']['Res']>
   'POST/pay': ResSelector<IModels['POST/pay']['Res']>
+  'GET/getmyorders': ResSelector<IModels['GET/getmyorders']['Res']>
+  'GET/refund': ResSelector<IModels['GET/refund']['Res']>
 }
 
 export function createFetch(fetchConfig: commonLib.RequesterOption, extraConfig?: {fetchType?: commonLib.FetchType}) {
@@ -299,6 +343,36 @@ export function createFetch(fetchConfig: commonLib.RequesterOption, extraConfig?
         params: req,
         extra,
       }) as Promise<IResponseTypes['POST/pay']>
+    },
+
+    /**
+     * 接口名：获取订单列表
+     * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2059118
+     * @param req 请求参数
+     * @param extra 请求配置项
+     */
+    'GET/getmyorders': (req?: IModels['GET/getmyorders']['Req'], extra?: commonLib.IExtra) => {
+      return rapperFetch({
+        url: '/getmyorders',
+        method: 'GET',
+        params: req,
+        extra,
+      }) as Promise<IResponseTypes['GET/getmyorders']>
+    },
+
+    /**
+     * 接口名：退票
+     * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2059123
+     * @param req 请求参数
+     * @param extra 请求配置项
+     */
+    'GET/refund': (req?: IModels['GET/refund']['Req'], extra?: commonLib.IExtra) => {
+      return rapperFetch({
+        url: '/refund',
+        method: 'GET',
+        params: req,
+        extra,
+      }) as Promise<IResponseTypes['GET/refund']>
     },
   }
 }

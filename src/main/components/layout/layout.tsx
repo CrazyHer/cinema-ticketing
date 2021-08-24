@@ -57,7 +57,7 @@ const HLayout = (props: any) => {
           <div className={Style.title}>
             {pathname !== '/user' && pathname !== '/admin' && (
               <Button
-                type="link"
+                type="text"
                 icon={<LeftOutlined />}
                 onClick={() => history.goBack()}
               />
@@ -81,6 +81,14 @@ const HLayout = (props: any) => {
                       type="text"
                     >
                       修改个人信息
+                    </Button>
+                  </Menu.Item>
+                  <Menu.Item key="orders">
+                    <Button
+                      onClick={() => history.push('/user/orders')}
+                      type="text"
+                    >
+                      我的订单
                     </Button>
                   </Menu.Item>
                   <Menu.Item key="logoff">
