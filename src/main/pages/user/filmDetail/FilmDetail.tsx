@@ -4,7 +4,7 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable react/display-name */
-import { Carousel, message, Table } from 'antd';
+import { Carousel, message, Skeleton, Table } from 'antd';
 import Button from 'antd/es/button';
 import Modal from 'antd/lib/modal/Modal';
 import { ColumnsType } from 'antd/lib/table';
@@ -20,7 +20,7 @@ const IconFont = createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_2764124_m58gtcntoj7.js',
 });
 
-type IData = Models['GET/getfilminfo']['Res']['data'];
+type IData = Models['GET/user/getfilminfo']['Res']['data'];
 
 interface IRecordData {
   cinema: string;
@@ -47,7 +47,7 @@ const FilmDetail = (props: any) => {
   useEffect(() => {
     if (IMDb) {
       setLoading(true);
-      fetch['GET/getfilminfo']()
+      fetch['GET/user/getfilminfo']()
         .then((res) => {
           if (res.code === 0) {
             setData(res.data);
@@ -94,7 +94,7 @@ const FilmDetail = (props: any) => {
     if (modalData) {
       setPayLoading(true);
       try {
-        const res = await fetch['POST/pay']({
+        const res = await fetch['POST/user/pay']({
           arrangementID: modalData.arrangementID,
           selectedSeats,
           price: modalData.price,
@@ -135,96 +135,97 @@ const FilmDetail = (props: any) => {
       ),
     },
   ];
-
   return (
-    <div>
-      <div className={Style.detailWrapper}>
-        <img className={Style.poster} src={data?.posterURL} alt="海报" />
-        <div className={Style.title}>
-          <h2>{data?.zhName}</h2>
-          <h2>{data?.enName}</h2>
-        </div>
-        <div className={Style.description}>
-          <p>类型：{data?.type}</p>
-          <p>制片地: {data?.country}</p>
-          <p>片长：{data?.duration}</p>
-          <p>演职人员：{data?.actor}</p>
-          <p>票房：{data?.boxOffice}</p>
-        </div>
-        <div className={Style.breif}>
-          <h3>剧情简介</h3>
-          <p>{data?.breif}</p>
-        </div>
-        <div className={Style.photos}>
-          <h3>剧照</h3>
-          <Carousel autoplay>
-            {data?.photosURL.map((v, i) => (
-              <img key={i} className={Style.photos} src={v} alt="剧照" />
-            ))}
-          </Carousel>
-        </div>
-      </div>
-      <div className={Style.arrangementsWrapper}>
-        <h3>排片列表</h3>
-        <Table
-          pagination={false}
-          dataSource={data?.arrangements.map((v, i) => ({
-            ...v,
-            key: v.arrangementID,
-          }))}
-          bordered={false}
-          columns={columns}
-        />
-      </div>
+    <Skeleton loading={loading}>
       <div>
-        <Modal
-          title="选座购票"
-          visible={modalVisible}
-          footer={null}
-          onCancel={() => {
-            // 关闭时重置状态
-            setModalVisible(false);
-            setModalData(undefined);
-            setSelectedSeats([]);
-          }}
-        >
-          <div className={Style.modal}>
-            <div className={Style.pickSeat}>
-              {modalData?.seats.map((v, i) => (
-                <div key={i} className={Style.seatRow}>
-                  {v.map((sv, si) => (
-                    <div key={si} onClick={() => handleSeatClick(i, si)}>
-                      {sv === 0 ? (
-                        <IconFont type="icon-SeatDisabled" />
-                      ) : sv === 1 ? (
-                        <IconFont type="icon-SeatAvailable" />
-                      ) : sv === 2 ? (
-                        <IconFont type="icon-SeatDefault" />
-                      ) : (
-                        <IconFont type="icon-SeatSelected" />
-                      )}
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
-            <div className={Style.listInfo}>
-              您选择了：
-              {selectedSeats.map((v, i) => (
-                <div key={i}>
-                  第{v.row + 1}排第{v.line + 1}座
-                  {i !== selectedSeats.length - 1 && ','}
-                </div>
-              ))}
-              共{modalData && selectedSeats.length * modalData?.price}元
-            </div>
-            <Button loading={payLoading} type="primary" onClick={handlePay}>
-              支付
-            </Button>
+        <div className={Style.detailWrapper}>
+          <img className={Style.poster} src={data?.posterURL} alt="海报" />
+          <div className={Style.title}>
+            <h2>{data?.zhName}</h2>
+            <h2>{data?.enName}</h2>
           </div>
-        </Modal>
+          <div className={Style.description}>
+            <p>类型：{data?.type}</p>
+            <p>制片地: {data?.country}</p>
+            <p>片长：{data?.duration}</p>
+            <p>演职人员：{data?.actor}</p>
+            <p>票房：{data?.boxOffice}</p>
+          </div>
+          <div className={Style.breif}>
+            <h3>剧情简介</h3>
+            <p>{data?.breif}</p>
+          </div>
+          <div className={Style.photos}>
+            <h3>剧照</h3>
+            <Carousel autoplay>
+              {data?.photosURL.map((v, i) => (
+                <img key={i} className={Style.photos} src={v} alt="剧照" />
+              ))}
+            </Carousel>
+          </div>
+        </div>
+        <div className={Style.arrangementsWrapper}>
+          <h3>排片列表</h3>
+          <Table
+            pagination={false}
+            dataSource={data?.arrangements.map((v, i) => ({
+              ...v,
+              key: v.arrangementID,
+            }))}
+            bordered={false}
+            columns={columns}
+          />
+        </div>
+        <div>
+          <Modal
+            title="选座购票"
+            visible={modalVisible}
+            footer={null}
+            onCancel={() => {
+              // 关闭时重置状态
+              setModalVisible(false);
+              setModalData(undefined);
+              setSelectedSeats([]);
+            }}
+          >
+            <div className={Style.modal}>
+              <div className={Style.pickSeat}>
+                {modalData?.seats.map((v, i) => (
+                  <div key={i} className={Style.seatRow}>
+                    {v.map((sv, si) => (
+                      <div key={si} onClick={() => handleSeatClick(i, si)}>
+                        {sv === 0 ? (
+                          <IconFont type="icon-SeatDisabled" />
+                        ) : sv === 1 ? (
+                          <IconFont type="icon-SeatAvailable" />
+                        ) : sv === 2 ? (
+                          <IconFont type="icon-SeatDefault" />
+                        ) : (
+                          <IconFont type="icon-SeatSelected" />
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ))}
+              </div>
+              <div className={Style.listInfo}>
+                您选择了：
+                {selectedSeats.map((v, i) => (
+                  <div key={i}>
+                    第{v.row + 1}排第{v.line + 1}座
+                    {i !== selectedSeats.length - 1 && ','}
+                  </div>
+                ))}
+                共{modalData && selectedSeats.length * modalData?.price}元
+              </div>
+              <Button loading={payLoading} type="primary" onClick={handlePay}>
+                支付
+              </Button>
+            </div>
+          </Modal>
+        </div>
       </div>
-    </div>
+    </Skeleton>
   );
 };
 export default inject()(observer(FilmDetail));

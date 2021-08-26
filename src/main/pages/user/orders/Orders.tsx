@@ -7,7 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { fetch, Models } from '../../../rapper';
 import Style from './Orders.module.css';
 
-type IData = Models['GET/getmyorders']['Res']['data'];
+type IData = Models['GET/user/getmyorders']['Res']['data'];
 interface IRecordData {
   cinema: string;
   hall: string;
@@ -26,7 +26,7 @@ const Orders = (props: any) => {
   const [refreshData, setRefreshData] = useState(false);
   useEffect(() => {
     setLoading(true);
-    fetch['GET/getmyorders']()
+    fetch['GET/user/getmyorders']()
       .then((res) => {
         if (res.code === 0) {
           setData(res.data);
@@ -48,7 +48,7 @@ const Orders = (props: any) => {
       title: '确认退票',
       onOk: () => {
         setRefundLoading(true);
-        fetch['GET/refund']({ orderID: record.orderID })
+        fetch['GET/user/refund']({ orderID: record.orderID })
           .then((res) => {
             if (res.code === 0) {
               message.success('退票成功');

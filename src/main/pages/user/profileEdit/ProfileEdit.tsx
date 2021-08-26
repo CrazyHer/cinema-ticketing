@@ -24,7 +24,7 @@ const ProfileEdit = (props: any) => {
     setLoading(true);
     try {
       console.log(e);
-      const res = await fetch['POST/editprofile']({
+      const res = await fetch['POST/user/editprofile']({
         address: e.address,
         email: e.email,
         imgSrc: e.imgSrc ? e.imgSrc : '',

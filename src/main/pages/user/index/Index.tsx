@@ -1,6 +1,6 @@
 /* eslint-disable promise/always-return */
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import { Card, Carousel, message } from 'antd';
+import { Card, Carousel, message, Skeleton } from 'antd';
 import { inject, observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
@@ -12,11 +12,12 @@ import Style from './Index.module.css';
 const Index = (props: any) => {
   const user = props.user as User;
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState<Models['GET/gethotfilms']['Res']['data']>();
+  const [data, setData] =
+    useState<Models['GET/user/gethotfilms']['Res']['data']>();
   const history = useHistory();
   useEffect(() => {
     setLoading(true);
-    fetch['GET/gethotfilms']({ address: user.address })
+    fetch['GET/user/gethotfilms']({ address: user.address })
       .then((res) => {
         if (res.code === 0) {
           setData(res.data.sort((a, b) => a.popularity - b.popularity));
@@ -32,42 +33,44 @@ const Index = (props: any) => {
   }, []);
 
   return (
-    <div className={Style.body}>
-      <div>
-        <h2>{`${user.address[0]}${user.address[1]}`} 正在热映</h2>
-        <Carousel
-          autoplay
-          arrows
-          className={Style.carousel}
-          nextArrow={<RightOutlined />}
-          prevArrow={<LeftOutlined />}
-        >
-          {data?.slice(0, data.length < 4 ? data.length - 1 : 4).map((v) => (
-            <Link key={v.IMDb} to={`/user/filmdetail?IMDb=${v.IMDb}`}>
-              <img src={v.posterURL} alt={v.name} />
+    <Skeleton loading={loading}>
+      <div className={Style.body}>
+        <div>
+          <h2>{`${user.address[0]}${user.address[1]}`} 正在热映</h2>
+          <Carousel
+            autoplay
+            arrows
+            className={Style.carousel}
+            nextArrow={<RightOutlined />}
+            prevArrow={<LeftOutlined />}
+          >
+            {data?.slice(0, data.length < 4 ? data.length - 1 : 4).map((v) => (
+              <Link key={v.IMDb} to={`/user/filmdetail?IMDb=${v.IMDb}`}>
+                <img src={v.posterURL} alt={v.name} />
+              </Link>
+            ))}
+          </Carousel>
+        </div>
+        <div>
+          <h2>票房排行</h2>
+          {data?.map((v) => (
+            <Link
+              className={Style.filmCard}
+              key={v.IMDb}
+              to={`/user/filmdetail?IMDb=${v.IMDb}`}
+            >
+              <Card
+                hoverable
+                style={{ width: 240 }}
+                cover={<img alt={v.IMDb} src={v.posterURL} />}
+              >
+                <Card.Meta title={v.name} />
+              </Card>
             </Link>
           ))}
-        </Carousel>
+        </div>
       </div>
-      <div>
-        <h2>票房排行</h2>
-        {data?.map((v) => (
-          <Link
-            className={Style.filmCard}
-            key={v.IMDb}
-            to={`/user/filmdetail?IMDb=${v.IMDb}`}
-          >
-            <Card
-              hoverable
-              style={{ width: 240 }}
-              cover={<img alt={v.IMDb} src={v.posterURL} />}
-            >
-              <Card.Meta title={v.name} />
-            </Card>
-          </Link>
-        ))}
-      </div>
-    </div>
+    </Skeleton>
   );
 };
 export default inject('user')(observer(Index));

@@ -1,4 +1,4 @@
-/* md5: 895a57f12f65c949d54372144435347e */
+/* md5: 3727fb7358a977e94cf04d0df3f77b16 */
 /* Rap仓库id: 288782 */
 /* Rapper版本: 1.2.2 */
 /* eslint-disable */
@@ -32,10 +32,26 @@ export interface IModels {
   }
 
   /**
+   * 接口名：注册
+   * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2053327
+   */
+  'POST/register': {
+    Req: {
+      username: string
+      password: string
+    }
+    Res: {
+      code: number
+      message: string
+      data: {}
+    }
+  }
+
+  /**
    * 接口名：获取用户信息
    * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2053037
    */
-  'GET/getuserinfo': {
+  'GET/user/getuserinfo': {
     Req: {}
     Res: {
       code: number
@@ -59,26 +75,10 @@ export interface IModels {
   }
 
   /**
-   * 接口名：注册
-   * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2053327
-   */
-  'POST/register': {
-    Req: {
-      username: string
-      password: string
-    }
-    Res: {
-      code: number
-      message: string
-      data: {}
-    }
-  }
-
-  /**
    * 接口名：获取热映电影
    * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2055387
    */
-  'GET/gethotfilms': {
+  'GET/user/gethotfilms': {
     Req: {
       address: string[]
     }
@@ -101,7 +101,7 @@ export interface IModels {
    * 接口名：修改个人信息
    * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2056760
    */
-  'POST/editprofile': {
+  'POST/user/editprofile': {
     Req: {
       imgSrc: string
       name: string
@@ -120,7 +120,7 @@ export interface IModels {
    * 接口名：获取电影详情
    * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2057993
    */
-  'GET/getfilminfo': {
+  'GET/user/getfilminfo': {
     Req: {
       IMDb: string
     }
@@ -160,7 +160,7 @@ export interface IModels {
    * 接口名：支付订单
    * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2058034
    */
-  'POST/pay': {
+  'POST/user/pay': {
     Req: {
       arrangementID: number
       selectedSeats: {
@@ -180,7 +180,7 @@ export interface IModels {
    * 接口名：获取订单列表
    * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2059118
    */
-  'GET/getmyorders': {
+  'GET/user/getmyorders': {
     Req: {}
     Res: {
       code: number
@@ -207,7 +207,7 @@ export interface IModels {
    * 接口名：退票
    * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2059123
    */
-  'GET/refund': {
+  'GET/user/refund': {
     Req: {
       orderID: number
     }
@@ -217,20 +217,64 @@ export interface IModels {
       data: {}
     }
   }
+
+  /**
+   * 接口名：获取统计信息
+   * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2061260
+   */
+  'GET/admin/getstats': {
+    Req: {}
+    Res: {
+      code: number
+      message: string
+      data: {
+        /**
+         * 总用户数
+         */
+        users: number
+        /**
+         * 总销售额
+         */
+        sales: number
+        /**
+         * 日销售额
+         */
+        dailySales: {
+          date: string
+          value: number
+        }[]
+        /**
+         * 各影片票房
+         */
+        boxOffice: {
+          filmName: string
+          value: number
+        }[]
+        /**
+         * 各影片上座率
+         */
+        seatRate: {
+          filmName: string
+          value: number
+        }[]
+      }
+    }
+  }
 }
 
 type ResSelector<T> = T
 
 export interface IResponseTypes {
   'POST/login': ResSelector<IModels['POST/login']['Res']>
-  'GET/getuserinfo': ResSelector<IModels['GET/getuserinfo']['Res']>
   'POST/register': ResSelector<IModels['POST/register']['Res']>
-  'GET/gethotfilms': ResSelector<IModels['GET/gethotfilms']['Res']>
-  'POST/editprofile': ResSelector<IModels['POST/editprofile']['Res']>
-  'GET/getfilminfo': ResSelector<IModels['GET/getfilminfo']['Res']>
-  'POST/pay': ResSelector<IModels['POST/pay']['Res']>
-  'GET/getmyorders': ResSelector<IModels['GET/getmyorders']['Res']>
-  'GET/refund': ResSelector<IModels['GET/refund']['Res']>
+  'GET/user/getuserinfo': ResSelector<IModels['GET/user/getuserinfo']['Res']>
+  'GET/user/gethotfilms': ResSelector<IModels['GET/user/gethotfilms']['Res']>
+  'POST/user/editprofile': ResSelector<IModels['POST/user/editprofile']['Res']>
+  'GET/user/getfilminfo': ResSelector<IModels['GET/user/getfilminfo']['Res']>
+  'POST/user/pay': ResSelector<IModels['POST/user/pay']['Res']>
+  'GET/user/getmyorders': ResSelector<IModels['GET/user/getmyorders']['Res']>
+  'GET/user/refund': ResSelector<IModels['GET/user/refund']['Res']>
+  'GET/admin/getstats': ResSelector<IModels['GET/admin/getstats']['Res']>
 }
 
 export function createFetch(fetchConfig: commonLib.RequesterOption, extraConfig?: {fetchType?: commonLib.FetchType}) {
@@ -256,21 +300,6 @@ export function createFetch(fetchConfig: commonLib.RequesterOption, extraConfig?
     },
 
     /**
-     * 接口名：获取用户信息
-     * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2053037
-     * @param req 请求参数
-     * @param extra 请求配置项
-     */
-    'GET/getuserinfo': (req?: IModels['GET/getuserinfo']['Req'], extra?: commonLib.IExtra) => {
-      return rapperFetch({
-        url: '/getuserinfo',
-        method: 'GET',
-        params: req,
-        extra,
-      }) as Promise<IResponseTypes['GET/getuserinfo']>
-    },
-
-    /**
      * 接口名：注册
      * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2053327
      * @param req 请求参数
@@ -286,18 +315,33 @@ export function createFetch(fetchConfig: commonLib.RequesterOption, extraConfig?
     },
 
     /**
+     * 接口名：获取用户信息
+     * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2053037
+     * @param req 请求参数
+     * @param extra 请求配置项
+     */
+    'GET/user/getuserinfo': (req?: IModels['GET/user/getuserinfo']['Req'], extra?: commonLib.IExtra) => {
+      return rapperFetch({
+        url: '/user/getuserinfo',
+        method: 'GET',
+        params: req,
+        extra,
+      }) as Promise<IResponseTypes['GET/user/getuserinfo']>
+    },
+
+    /**
      * 接口名：获取热映电影
      * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2055387
      * @param req 请求参数
      * @param extra 请求配置项
      */
-    'GET/gethotfilms': (req?: IModels['GET/gethotfilms']['Req'], extra?: commonLib.IExtra) => {
+    'GET/user/gethotfilms': (req?: IModels['GET/user/gethotfilms']['Req'], extra?: commonLib.IExtra) => {
       return rapperFetch({
-        url: '/gethotfilms',
+        url: '/user/gethotfilms',
         method: 'GET',
         params: req,
         extra,
-      }) as Promise<IResponseTypes['GET/gethotfilms']>
+      }) as Promise<IResponseTypes['GET/user/gethotfilms']>
     },
 
     /**
@@ -306,13 +350,13 @@ export function createFetch(fetchConfig: commonLib.RequesterOption, extraConfig?
      * @param req 请求参数
      * @param extra 请求配置项
      */
-    'POST/editprofile': (req?: IModels['POST/editprofile']['Req'], extra?: commonLib.IExtra) => {
+    'POST/user/editprofile': (req?: IModels['POST/user/editprofile']['Req'], extra?: commonLib.IExtra) => {
       return rapperFetch({
-        url: '/editprofile',
+        url: '/user/editprofile',
         method: 'POST',
         params: req,
         extra,
-      }) as Promise<IResponseTypes['POST/editprofile']>
+      }) as Promise<IResponseTypes['POST/user/editprofile']>
     },
 
     /**
@@ -321,13 +365,13 @@ export function createFetch(fetchConfig: commonLib.RequesterOption, extraConfig?
      * @param req 请求参数
      * @param extra 请求配置项
      */
-    'GET/getfilminfo': (req?: IModels['GET/getfilminfo']['Req'], extra?: commonLib.IExtra) => {
+    'GET/user/getfilminfo': (req?: IModels['GET/user/getfilminfo']['Req'], extra?: commonLib.IExtra) => {
       return rapperFetch({
-        url: '/getfilminfo',
+        url: '/user/getfilminfo',
         method: 'GET',
         params: req,
         extra,
-      }) as Promise<IResponseTypes['GET/getfilminfo']>
+      }) as Promise<IResponseTypes['GET/user/getfilminfo']>
     },
 
     /**
@@ -336,13 +380,13 @@ export function createFetch(fetchConfig: commonLib.RequesterOption, extraConfig?
      * @param req 请求参数
      * @param extra 请求配置项
      */
-    'POST/pay': (req?: IModels['POST/pay']['Req'], extra?: commonLib.IExtra) => {
+    'POST/user/pay': (req?: IModels['POST/user/pay']['Req'], extra?: commonLib.IExtra) => {
       return rapperFetch({
-        url: '/pay',
+        url: '/user/pay',
         method: 'POST',
         params: req,
         extra,
-      }) as Promise<IResponseTypes['POST/pay']>
+      }) as Promise<IResponseTypes['POST/user/pay']>
     },
 
     /**
@@ -351,13 +395,13 @@ export function createFetch(fetchConfig: commonLib.RequesterOption, extraConfig?
      * @param req 请求参数
      * @param extra 请求配置项
      */
-    'GET/getmyorders': (req?: IModels['GET/getmyorders']['Req'], extra?: commonLib.IExtra) => {
+    'GET/user/getmyorders': (req?: IModels['GET/user/getmyorders']['Req'], extra?: commonLib.IExtra) => {
       return rapperFetch({
-        url: '/getmyorders',
+        url: '/user/getmyorders',
         method: 'GET',
         params: req,
         extra,
-      }) as Promise<IResponseTypes['GET/getmyorders']>
+      }) as Promise<IResponseTypes['GET/user/getmyorders']>
     },
 
     /**
@@ -366,13 +410,28 @@ export function createFetch(fetchConfig: commonLib.RequesterOption, extraConfig?
      * @param req 请求参数
      * @param extra 请求配置项
      */
-    'GET/refund': (req?: IModels['GET/refund']['Req'], extra?: commonLib.IExtra) => {
+    'GET/user/refund': (req?: IModels['GET/user/refund']['Req'], extra?: commonLib.IExtra) => {
       return rapperFetch({
-        url: '/refund',
+        url: '/user/refund',
         method: 'GET',
         params: req,
         extra,
-      }) as Promise<IResponseTypes['GET/refund']>
+      }) as Promise<IResponseTypes['GET/user/refund']>
+    },
+
+    /**
+     * 接口名：获取统计信息
+     * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2061260
+     * @param req 请求参数
+     * @param extra 请求配置项
+     */
+    'GET/admin/getstats': (req?: IModels['GET/admin/getstats']['Req'], extra?: commonLib.IExtra) => {
+      return rapperFetch({
+        url: '/admin/getstats',
+        method: 'GET',
+        params: req,
+        extra,
+      }) as Promise<IResponseTypes['GET/admin/getstats']>
     },
   }
 }

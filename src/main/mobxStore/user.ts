@@ -17,13 +17,12 @@ export default class User {
   phone: string;
   email: string;
   address: string[];
-  availableCities: Models['GET/getuserinfo']['Res']['data']['availableCities'];
+  availableCities: Models['GET/user/getuserinfo']['Res']['data']['availableCities'];
 
   constructor() {
     makeAutoObservable(this);
 
     this.token = localStorage.getItem('token') || '';
-    customFetch(this.token);
 
     const formData = localStorage.getItem('loginFormData');
     if (formData) {
@@ -63,7 +62,9 @@ export default class User {
     this.loginFormData = data;
   };
 
-  @action setUserInfo = (data: Models['GET/getuserinfo']['Res']['data']) => {
+  @action setUserInfo = (
+    data: Models['GET/user/getuserinfo']['Res']['data']
+  ) => {
     this.name = data.name;
     this.avatarURL = data.avatarURL;
     this.phone = data.phone;

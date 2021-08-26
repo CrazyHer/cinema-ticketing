@@ -1,4 +1,4 @@
-import { Form, Input, Button, message, Checkbox, Col, Row } from 'antd';
+import { Form, Input, Button, message, Checkbox } from 'antd';
 import { inject, observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -41,7 +41,7 @@ const Login = (props: any) => {
       });
       if (res.code === 0) {
         const { token } = res.data;
-        user.setUserInfo((await fetch['GET/getuserinfo']()).data);
+        user.setUserInfo((await fetch['GET/user/getuserinfo']()).data);
         user.setLoginFormData(formData);
         user.setToken(token);
       } else {
