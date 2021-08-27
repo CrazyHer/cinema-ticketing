@@ -83,13 +83,7 @@ const HLayout = (props: any) => {
                 }
               >
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <Avatar
-                    style={{ marginRight: '20px' }}
-                    shape="circle"
-                    size="large"
-                    icon={<img src={user.avatarURL} alt="头像" />}
-                  />
-                  <div className={Style['user-tag']}>{user.name}</div>
+                  <div className={Style['user-tag']}>管理员 {user.name}</div>
                 </div>
               </Dropdown>
             </div>
