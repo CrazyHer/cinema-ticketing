@@ -108,7 +108,9 @@ const HLayout = (props: any) => {
             <Menu.Item key="/admin/users">用户管理</Menu.Item>
           </Menu>
         </Sider>
-        <Content style={{ marginTop: '80px' }}>{children}</Content>
+        <Content style={{ marginTop: '80px', marginLeft: '20px' }}>
+          {children}
+        </Content>
       </Layout>
     );
 

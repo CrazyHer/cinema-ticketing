@@ -1,4 +1,4 @@
-/* md5: 3727fb7358a977e94cf04d0df3f77b16 */
+/* md5: c64e693bac7516a4a2a8401f6cb052e5 */
 /* Rap仓库id: 288782 */
 /* Rapper版本: 1.2.2 */
 /* eslint-disable */
@@ -260,6 +260,31 @@ export interface IModels {
       }
     }
   }
+
+  /**
+   * 接口名：获取电影列表
+   * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2062438
+   */
+  'GET/admin/getfilms': {
+    Req: {}
+    Res: {
+      code: number
+      message: string
+      data: {
+        IMDb: string
+        zhName: string
+        enName: string
+        type: string
+        country: string
+        duration: string
+        actor: string
+        boxOffice: number
+        posterURL: string
+        photosURL: string[]
+        breif: string
+      }[]
+    }
+  }
 }
 
 type ResSelector<T> = T
@@ -275,6 +300,7 @@ export interface IResponseTypes {
   'GET/user/getmyorders': ResSelector<IModels['GET/user/getmyorders']['Res']>
   'GET/user/refund': ResSelector<IModels['GET/user/refund']['Res']>
   'GET/admin/getstats': ResSelector<IModels['GET/admin/getstats']['Res']>
+  'GET/admin/getfilms': ResSelector<IModels['GET/admin/getfilms']['Res']>
 }
 
 export function createFetch(fetchConfig: commonLib.RequesterOption, extraConfig?: {fetchType?: commonLib.FetchType}) {
@@ -432,6 +458,21 @@ export function createFetch(fetchConfig: commonLib.RequesterOption, extraConfig?
         params: req,
         extra,
       }) as Promise<IResponseTypes['GET/admin/getstats']>
+    },
+
+    /**
+     * 接口名：获取电影列表
+     * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2062438
+     * @param req 请求参数
+     * @param extra 请求配置项
+     */
+    'GET/admin/getfilms': (req?: IModels['GET/admin/getfilms']['Req'], extra?: commonLib.IExtra) => {
+      return rapperFetch({
+        url: '/admin/getfilms',
+        method: 'GET',
+        params: req,
+        extra,
+      }) as Promise<IResponseTypes['GET/admin/getfilms']>
     },
   }
 }

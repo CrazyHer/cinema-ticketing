@@ -13,14 +13,37 @@ import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { createFromIconfontCN } from '@ant-design/icons';
 
-import { fetch, Models } from '../../../rapper';
+import { fetch } from '../../../rapper';
 import Style from './FilmDetail.module.css';
 
 const IconFont = createFromIconfontCN({
   scriptUrl: '//at.alicdn.com/t/font_2764124_m58gtcntoj7.js',
 });
 
-type IData = Models['GET/user/getfilminfo']['Res']['data'];
+interface IData {
+  arrangements: {
+    cinema: string;
+    hall: string;
+    time: string;
+    /**
+     * 0为禁用，1为空闲，2为占用
+     */
+    seats: number[][];
+    price: number;
+    arrangementID: number;
+  }[];
+  zhName: string;
+  enName: string;
+  type: string;
+  country: string;
+  duration: string;
+  IMDb: string;
+  actor: string;
+  boxOffice: number;
+  posterURL: string;
+  photosURL: string[];
+  breif: string;
+}
 
 interface IRecordData {
   cinema: string;
@@ -50,7 +73,7 @@ const FilmDetail = (props: any) => {
       fetch['GET/user/getfilminfo']()
         .then((res) => {
           if (res.code === 0) {
-            setData(res.data);
+            setData(res.data as IData);
           } else {
             message.error(`获取电影信息失败,${res.message}`);
           }
@@ -116,7 +139,7 @@ const FilmDetail = (props: any) => {
     }
   };
 
-  const columns: ColumnsType<Record<string, unknown>> = [
+  const columns: ColumnsType<IRecordData> = [
     { title: '电影院', dataIndex: 'cinema', align: 'center' },
     { title: '放映厅', dataIndex: 'hall', align: 'center' },
     { title: '放映时间', dataIndex: 'time', align: 'center' },
@@ -126,15 +149,13 @@ const FilmDetail = (props: any) => {
       title: '操作',
       align: 'center',
       render: (value, record) => (
-        <Button
-          type="link"
-          onClick={() => handleTicketingClick(record as unknown as IRecordData)}
-        >
+        <Button type="link" onClick={() => handleTicketingClick(record)}>
           选座购票
         </Button>
       ),
     },
   ];
+
   return (
     <Skeleton loading={loading}>
       <div>
@@ -166,7 +187,7 @@ const FilmDetail = (props: any) => {
         </div>
         <div className={Style.arrangementsWrapper}>
           <h3>排片列表</h3>
-          <Table
+          <Table<IRecordData>
             pagination={false}
             dataSource={data?.arrangements.map((v, i) => ({
               ...v,

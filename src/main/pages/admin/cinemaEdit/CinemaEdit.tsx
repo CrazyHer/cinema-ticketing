@@ -130,4 +130,4 @@ const CinemaEdit = (props: any) => {
     </div>
   );
 };
-export default inject()(observer(CinemaEdit));
+export default inject('user')(observer(CinemaEdit));
