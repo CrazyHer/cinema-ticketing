@@ -6,8 +6,8 @@ import { useHistory } from 'react-router';
 import User from '../../../mobxStore/user';
 import { fetch } from '../../../rapper';
 
-interface FormData {
-  name: string;
+interface IFormData {
+  username: string;
   email: string;
   address: string[];
   phone: string;
@@ -15,18 +15,18 @@ interface FormData {
 
 const CinemaEdit = (props: any) => {
   const user = props.user as User;
-  const [form] = useForm();
+  const [form] = useForm<IFormData>();
   const [loading, setLoading] = useState(false);
   const history = useHistory();
 
-  const handleSubmit = async (e: FormData) => {
+  const handleSubmit = async (e: IFormData) => {
     setLoading(true);
     try {
       const res = await fetch['POST/user/editprofile']({
         imgSrc: '',
         address: e.address,
         email: e.email,
-        name: e.name,
+        username: e.username,
         phone: e.phone,
       });
       if (res.code === 0) {
@@ -50,16 +50,14 @@ const CinemaEdit = (props: any) => {
       <Form
         form={form}
         onFinish={handleSubmit}
-        initialValues={
-          {
-            name: user.name,
-            email: user.email,
-            phone: user.phone,
-            address: user.address,
-          } as FormData
-        }
+        initialValues={{
+          username: user.username,
+          email: user.email,
+          phone: user.phone,
+          address: user.address,
+        }}
       >
-        <Form.Item label="影院名称" name="name" required>
+        <Form.Item label="影院名称" name="username" required>
           <Input />
         </Form.Item>
 

@@ -6,12 +6,21 @@ const customFetch = (token: string) => {
   overrideFetch(
     ({ url, method, params }) =>
       new Promise<any>((resolve, reject) => {
-        const config: AxiosRequestConfig = {
-          method,
-          url,
-          data: params,
-          baseURL: 'http://rap2api.taobao.org/app/mock/288782',
-        };
+        const config: AxiosRequestConfig =
+          // 为POST方法时将数据放入body中，否则作为参数
+          method === 'POST'
+            ? {
+                method,
+                url,
+                data: params,
+                baseURL: 'http://rap2api.taobao.org/app/mock/288782',
+              }
+            : {
+                method,
+                url,
+                params,
+                baseURL: 'http://rap2api.taobao.org/app/mock/288782',
+              };
         axios(
           // 登录接口请求头不附带token
           url === '/login' ? config : { ...config, headers: { token } }

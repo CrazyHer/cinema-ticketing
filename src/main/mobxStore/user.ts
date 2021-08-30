@@ -3,7 +3,7 @@ import { Models } from '../rapper';
 import customFetch from '../rapper/customFetch';
 
 export interface ILoginFormData {
-  username: string;
+  userID: string;
   password: string;
   remember: boolean;
 }
@@ -12,7 +12,7 @@ export default class User {
   character: 'user' | 'admin' | undefined;
   loginFormData: ILoginFormData;
 
-  name: string;
+  username: string;
   avatarURL: string;
   phone: string;
   email: string;
@@ -28,10 +28,10 @@ export default class User {
     if (formData) {
       this.loginFormData = JSON.parse(formData);
     } else {
-      this.loginFormData = { password: '', username: '', remember: false };
+      this.loginFormData = { password: '', userID: '', remember: false };
     }
 
-    this.name = '';
+    this.username = '';
     this.avatarURL = '';
     this.phone = '';
     this.email = '';
@@ -53,7 +53,7 @@ export default class User {
       localStorage.setItem(
         'loginFormData',
         JSON.stringify({
-          username: data.username,
+          userID: data.userID,
           password: '',
           remember: false,
         } as ILoginFormData)
@@ -65,7 +65,7 @@ export default class User {
   @action setUserInfo = (
     data: Models['GET/user/getuserinfo']['Res']['data']
   ) => {
-    this.name = data.name;
+    this.username = data.username;
     this.avatarURL = data.avatarURL;
     this.phone = data.phone;
     this.email = data.email;

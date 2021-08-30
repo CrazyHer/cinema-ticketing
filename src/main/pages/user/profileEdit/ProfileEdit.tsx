@@ -7,9 +7,9 @@ import { useHistory } from 'react-router';
 import User from '../../../mobxStore/user';
 import { fetch } from '../../../rapper';
 
-interface FormData {
+interface IFormData {
   imgSrc: string | undefined;
-  name: string;
+  username: string;
   email: string;
   address: string[];
   phone: string;
@@ -17,10 +17,10 @@ interface FormData {
 
 const ProfileEdit = (props: any) => {
   const user = props.user as User;
-  const [form] = useForm();
+  const [form] = useForm<IFormData>();
   const [loading, setLoading] = useState(false);
   const [imgSrc, setImgSrc] = useState<string>(user.avatarURL);
-  const handleSubmit = async (e: FormData) => {
+  const handleSubmit = async (e: IFormData) => {
     setLoading(true);
     try {
       console.log(e);
@@ -28,7 +28,7 @@ const ProfileEdit = (props: any) => {
         address: e.address,
         email: e.email,
         imgSrc: e.imgSrc ? e.imgSrc : '',
-        name: e.name,
+        username: e.username,
         phone: e.phone,
       });
       if (res.code === 0) {
@@ -85,14 +85,12 @@ const ProfileEdit = (props: any) => {
       <Form
         form={form}
         onFinish={handleSubmit}
-        initialValues={
-          {
-            name: user.name,
-            email: user.email,
-            phone: user.phone,
-            address: user.address,
-          } as FormData
-        }
+        initialValues={{
+          username: user.username,
+          email: user.email,
+          phone: user.phone,
+          address: user.address,
+        }}
       >
         <div>
           <p style={{ float: 'left' }}>个人头像：</p>
@@ -111,7 +109,7 @@ const ProfileEdit = (props: any) => {
           </Upload>
         </div>
 
-        <Form.Item label="昵称" name="name" required>
+        <Form.Item label="昵称" name="username" required>
           <Input />
         </Form.Item>
         <Form.Item label="头像" name="imgSrc" hidden />

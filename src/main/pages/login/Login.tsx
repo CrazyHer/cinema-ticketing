@@ -9,6 +9,11 @@ import User, { ILoginFormData } from '../../mobxStore/user';
 import { fetch } from '../../rapper';
 import Style from './Login.module.css';
 
+interface IRegisterFormData {
+  userID: string;
+  password: string;
+}
+
 const Login = (props: any) => {
   const user = props.user as User;
 
@@ -24,14 +29,14 @@ const Login = (props: any) => {
     }
   }, [user.token]);
 
-  const [registerForm] = useForm();
-  const [loginForm] = useForm();
+  const [registerForm] = useForm<IRegisterFormData>();
+  const [loginForm] = useForm<ILoginFormData>();
 
   const handleLogin = async (formData: ILoginFormData) => {
     setLoading(true);
     try {
       const res = await fetch['POST/login']({
-        username: formData.username,
+        userID: formData.userID,
         // 对密码进行SHA256加密
         password: crypto
           .createHmac('sha256', 'CrazyHer')
@@ -56,17 +61,12 @@ const Login = (props: any) => {
     }
   };
 
-  interface IRegisterFormData {
-    username: string;
-    password: string;
-  }
-
   const handleRegister = async (data: IRegisterFormData) => {
     try {
       setLoading(true);
 
       const res = await fetch['POST/register']({
-        username: data.username,
+        userID: data.userID,
         // 对密码进行SHA256加密
         password: crypto
           .createHmac('sha256', 'CrazyHer')
@@ -110,15 +110,15 @@ const Login = (props: any) => {
               onFinish={handleRegister}
             >
               <Form.Item
-                label="用户名"
-                name="username"
+                label="账号"
+                name="userID"
                 hasFeedback
                 validateFirst
                 rules={[
-                  { required: true, message: '请输入用户名' },
+                  { required: true, message: '请输入账号' },
                   {
                     pattern: /^[\w@]*$/i,
-                    message: '用户名只允许字母、@和下划线_',
+                    message: '账号只允许字母、@和下划线_',
                   },
                 ]}
               >
@@ -184,7 +184,7 @@ const Login = (props: any) => {
               form={loginForm}
             >
               <Form.Item
-                name="username"
+                name="userID"
                 rules={[{ required: true, message: '请输入账号!' }]}
               >
                 <Input prefix={<UserOutlined />} placeholder="账号" />

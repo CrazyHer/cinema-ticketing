@@ -1,4 +1,4 @@
-/* md5: c64e693bac7516a4a2a8401f6cb052e5 */
+/* md5: 1e4d279fc8f8d903b48e0299a07a1684 */
 /* Rap仓库id: 288782 */
 /* Rapper版本: 1.2.2 */
 /* eslint-disable */
@@ -19,7 +19,7 @@ export interface IModels {
    */
   'POST/login': {
     Req: {
-      username: string
+      userID: string
       password: string
     }
     Res: {
@@ -37,13 +37,12 @@ export interface IModels {
    */
   'POST/register': {
     Req: {
-      username: string
+      userID: string
       password: string
     }
     Res: {
       code: number
       message: string
-      data: {}
     }
   }
 
@@ -58,7 +57,7 @@ export interface IModels {
       message: string
       data: {
         character: string
-        name: string
+        username: string
         avatarURL: string
         phone: string
         email: string
@@ -104,7 +103,7 @@ export interface IModels {
   'POST/user/editprofile': {
     Req: {
       imgSrc: string
-      name: string
+      username: string
       email: string
       address: string[]
       phone: string
@@ -112,7 +111,6 @@ export interface IModels {
     Res: {
       code: number
       message: string
-      data: string
     }
   }
 
@@ -172,7 +170,6 @@ export interface IModels {
     Res: {
       code: number
       message: string
-      data: string
     }
   }
 
@@ -214,7 +211,6 @@ export interface IModels {
     Res: {
       code: number
       message: string
-      data: {}
     }
   }
 
@@ -285,6 +281,262 @@ export interface IModels {
       }[]
     }
   }
+
+  /**
+   * 接口名：修改电影信息
+   * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2062765
+   */
+  'POST/admin/editfilm': {
+    Req: {
+      IMDb: string
+      zhName: string
+      enName: string
+      type: string
+      country: string
+      duration: string
+      actor: string
+      posterURL: string
+      photosURL: string[]
+      breif: string
+    }
+    Res: {
+      code: number
+      message: string
+    }
+  }
+
+  /**
+   * 接口名：新增电影
+   * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2062767
+   */
+  'POST/admin/addfilm': {
+    Req: {
+      IMDb: string
+      zhName: string
+      enName: string
+      type: string
+      country: string
+      duration: string
+      actor: string
+      posterURL: string
+      photosURL: string[]
+      breif: string
+    }
+    Res: {
+      code: number
+      message: string
+    }
+  }
+
+  /**
+   * 接口名：删除电影
+   * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2062817
+   */
+  'GET/admin/delfilm': {
+    Req: {
+      IMDb: string
+    }
+    Res: {
+      code: number
+      message: string
+    }
+  }
+
+  /**
+   * 接口名：获取排片列表
+   * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2062851
+   */
+  'GET/admin/getarrangements': {
+    Req: {}
+    Res: {
+      code: number
+      message: string
+      data: {
+        filmName: string
+        hall: string
+        time: string
+        seats: {
+          [k: string]: any
+        }[]
+        price: number
+        arrangementID: number
+      }[]
+    }
+  }
+
+  /**
+   * 接口名：添加排片
+   * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2062846
+   */
+  'POST/admin/addarrangement': {
+    Req: {
+      IMDb: string
+      hallID: string
+      time: string
+      price: number
+    }
+    Res: {
+      code: number
+      message: string
+    }
+  }
+
+  /**
+   * 接口名：删除排片
+   * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2062847
+   */
+  'GET/admin/delarrangement': {
+    Req: {
+      arrangementID: number
+    }
+    Res: {
+      code: number
+      message: string
+    }
+  }
+
+  /**
+   * 接口名：获取放映厅列表
+   * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2062852
+   */
+  'GET/admin/gethalls': {
+    Req: {}
+    Res: {
+      code: number
+      message: string
+      data: {
+        hallID: number
+        hallName: string
+        seats: {
+          [k: string]: any
+        }[]
+        comment: string
+      }[]
+    }
+  }
+
+  /**
+   * 接口名：添加放映厅
+   * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2062848
+   */
+  'POST/admin/addhall': {
+    Req: {
+      hallName: string
+      seats: any[]
+      comment: string
+    }
+    Res: {
+      code: number
+      message: string
+    }
+  }
+
+  /**
+   * 接口名：修改放映厅
+   * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2062849
+   */
+  'POST/admin/edithall': {
+    Req: {
+      hallID: number
+      hallName: string
+      seats: any[]
+      comment: string
+    }
+    Res: {
+      code: number
+      message: string
+    }
+  }
+
+  /**
+   * 接口名：删除放映厅
+   * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2062850
+   */
+  'GET/admin/delhall': {
+    Req: {
+      hallID: number
+    }
+    Res: {
+      code: number
+      message: string
+    }
+  }
+
+  /**
+   * 接口名：获取订单列表
+   * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2062853
+   */
+  'GET/admin/getorders': {
+    Req: {}
+    Res: {
+      code: number
+      message: string
+      data: {
+        orderID: number
+        userID: string
+        cinema: string
+        hall: string
+        time: string
+        selectedSeats: {
+          row: number
+          line: number
+        }[]
+        totalPrice: number
+        status: number
+      }[]
+    }
+  }
+
+  /**
+   * 接口名：获取用户列表
+   * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2062854
+   */
+  'GET/admin/getusers': {
+    Req: {}
+    Res: {
+      code: number
+      message: string
+      data: {
+        userID: string
+        username: string
+        role: string
+        address: string
+      }[]
+    }
+  }
+
+  /**
+   * 接口名：添加分店管理员
+   * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2062860
+   */
+  'POST/admin/addadmin': {
+    Req: {
+      username: string
+      email: string
+      phone: string
+      address: string[]
+      password: string
+      userID: string
+    }
+    Res: {
+      code: number
+      message: string
+    }
+  }
+
+  /**
+   * 接口名：删除用户
+   * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2062861
+   */
+  'GET/admin/deluser': {
+    Req: {
+      userID: string
+    }
+    Res: {
+      code: number
+      message: string
+    }
+  }
 }
 
 type ResSelector<T> = T
@@ -301,6 +553,20 @@ export interface IResponseTypes {
   'GET/user/refund': ResSelector<IModels['GET/user/refund']['Res']>
   'GET/admin/getstats': ResSelector<IModels['GET/admin/getstats']['Res']>
   'GET/admin/getfilms': ResSelector<IModels['GET/admin/getfilms']['Res']>
+  'POST/admin/editfilm': ResSelector<IModels['POST/admin/editfilm']['Res']>
+  'POST/admin/addfilm': ResSelector<IModels['POST/admin/addfilm']['Res']>
+  'GET/admin/delfilm': ResSelector<IModels['GET/admin/delfilm']['Res']>
+  'GET/admin/getarrangements': ResSelector<IModels['GET/admin/getarrangements']['Res']>
+  'POST/admin/addarrangement': ResSelector<IModels['POST/admin/addarrangement']['Res']>
+  'GET/admin/delarrangement': ResSelector<IModels['GET/admin/delarrangement']['Res']>
+  'GET/admin/gethalls': ResSelector<IModels['GET/admin/gethalls']['Res']>
+  'POST/admin/addhall': ResSelector<IModels['POST/admin/addhall']['Res']>
+  'POST/admin/edithall': ResSelector<IModels['POST/admin/edithall']['Res']>
+  'GET/admin/delhall': ResSelector<IModels['GET/admin/delhall']['Res']>
+  'GET/admin/getorders': ResSelector<IModels['GET/admin/getorders']['Res']>
+  'GET/admin/getusers': ResSelector<IModels['GET/admin/getusers']['Res']>
+  'POST/admin/addadmin': ResSelector<IModels['POST/admin/addadmin']['Res']>
+  'GET/admin/deluser': ResSelector<IModels['GET/admin/deluser']['Res']>
 }
 
 export function createFetch(fetchConfig: commonLib.RequesterOption, extraConfig?: {fetchType?: commonLib.FetchType}) {
@@ -473,6 +739,216 @@ export function createFetch(fetchConfig: commonLib.RequesterOption, extraConfig?
         params: req,
         extra,
       }) as Promise<IResponseTypes['GET/admin/getfilms']>
+    },
+
+    /**
+     * 接口名：修改电影信息
+     * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2062765
+     * @param req 请求参数
+     * @param extra 请求配置项
+     */
+    'POST/admin/editfilm': (req?: IModels['POST/admin/editfilm']['Req'], extra?: commonLib.IExtra) => {
+      return rapperFetch({
+        url: '/admin/editfilm',
+        method: 'POST',
+        params: req,
+        extra,
+      }) as Promise<IResponseTypes['POST/admin/editfilm']>
+    },
+
+    /**
+     * 接口名：新增电影
+     * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2062767
+     * @param req 请求参数
+     * @param extra 请求配置项
+     */
+    'POST/admin/addfilm': (req?: IModels['POST/admin/addfilm']['Req'], extra?: commonLib.IExtra) => {
+      return rapperFetch({
+        url: '/admin/addfilm',
+        method: 'POST',
+        params: req,
+        extra,
+      }) as Promise<IResponseTypes['POST/admin/addfilm']>
+    },
+
+    /**
+     * 接口名：删除电影
+     * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2062817
+     * @param req 请求参数
+     * @param extra 请求配置项
+     */
+    'GET/admin/delfilm': (req?: IModels['GET/admin/delfilm']['Req'], extra?: commonLib.IExtra) => {
+      return rapperFetch({
+        url: '/admin/delfilm',
+        method: 'GET',
+        params: req,
+        extra,
+      }) as Promise<IResponseTypes['GET/admin/delfilm']>
+    },
+
+    /**
+     * 接口名：获取排片列表
+     * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2062851
+     * @param req 请求参数
+     * @param extra 请求配置项
+     */
+    'GET/admin/getarrangements': (req?: IModels['GET/admin/getarrangements']['Req'], extra?: commonLib.IExtra) => {
+      return rapperFetch({
+        url: '/admin/getarrangements',
+        method: 'GET',
+        params: req,
+        extra,
+      }) as Promise<IResponseTypes['GET/admin/getarrangements']>
+    },
+
+    /**
+     * 接口名：添加排片
+     * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2062846
+     * @param req 请求参数
+     * @param extra 请求配置项
+     */
+    'POST/admin/addarrangement': (req?: IModels['POST/admin/addarrangement']['Req'], extra?: commonLib.IExtra) => {
+      return rapperFetch({
+        url: '/admin/addarrangement',
+        method: 'POST',
+        params: req,
+        extra,
+      }) as Promise<IResponseTypes['POST/admin/addarrangement']>
+    },
+
+    /**
+     * 接口名：删除排片
+     * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2062847
+     * @param req 请求参数
+     * @param extra 请求配置项
+     */
+    'GET/admin/delarrangement': (req?: IModels['GET/admin/delarrangement']['Req'], extra?: commonLib.IExtra) => {
+      return rapperFetch({
+        url: '/admin/delarrangement',
+        method: 'GET',
+        params: req,
+        extra,
+      }) as Promise<IResponseTypes['GET/admin/delarrangement']>
+    },
+
+    /**
+     * 接口名：获取放映厅列表
+     * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2062852
+     * @param req 请求参数
+     * @param extra 请求配置项
+     */
+    'GET/admin/gethalls': (req?: IModels['GET/admin/gethalls']['Req'], extra?: commonLib.IExtra) => {
+      return rapperFetch({
+        url: '/admin/gethalls',
+        method: 'GET',
+        params: req,
+        extra,
+      }) as Promise<IResponseTypes['GET/admin/gethalls']>
+    },
+
+    /**
+     * 接口名：添加放映厅
+     * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2062848
+     * @param req 请求参数
+     * @param extra 请求配置项
+     */
+    'POST/admin/addhall': (req?: IModels['POST/admin/addhall']['Req'], extra?: commonLib.IExtra) => {
+      return rapperFetch({
+        url: '/admin/addhall',
+        method: 'POST',
+        params: req,
+        extra,
+      }) as Promise<IResponseTypes['POST/admin/addhall']>
+    },
+
+    /**
+     * 接口名：修改放映厅
+     * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2062849
+     * @param req 请求参数
+     * @param extra 请求配置项
+     */
+    'POST/admin/edithall': (req?: IModels['POST/admin/edithall']['Req'], extra?: commonLib.IExtra) => {
+      return rapperFetch({
+        url: '/admin/edithall',
+        method: 'POST',
+        params: req,
+        extra,
+      }) as Promise<IResponseTypes['POST/admin/edithall']>
+    },
+
+    /**
+     * 接口名：删除放映厅
+     * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2062850
+     * @param req 请求参数
+     * @param extra 请求配置项
+     */
+    'GET/admin/delhall': (req?: IModels['GET/admin/delhall']['Req'], extra?: commonLib.IExtra) => {
+      return rapperFetch({
+        url: '/admin/delhall',
+        method: 'GET',
+        params: req,
+        extra,
+      }) as Promise<IResponseTypes['GET/admin/delhall']>
+    },
+
+    /**
+     * 接口名：获取订单列表
+     * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2062853
+     * @param req 请求参数
+     * @param extra 请求配置项
+     */
+    'GET/admin/getorders': (req?: IModels['GET/admin/getorders']['Req'], extra?: commonLib.IExtra) => {
+      return rapperFetch({
+        url: '/admin/getorders',
+        method: 'GET',
+        params: req,
+        extra,
+      }) as Promise<IResponseTypes['GET/admin/getorders']>
+    },
+
+    /**
+     * 接口名：获取用户列表
+     * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2062854
+     * @param req 请求参数
+     * @param extra 请求配置项
+     */
+    'GET/admin/getusers': (req?: IModels['GET/admin/getusers']['Req'], extra?: commonLib.IExtra) => {
+      return rapperFetch({
+        url: '/admin/getusers',
+        method: 'GET',
+        params: req,
+        extra,
+      }) as Promise<IResponseTypes['GET/admin/getusers']>
+    },
+
+    /**
+     * 接口名：添加分店管理员
+     * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2062860
+     * @param req 请求参数
+     * @param extra 请求配置项
+     */
+    'POST/admin/addadmin': (req?: IModels['POST/admin/addadmin']['Req'], extra?: commonLib.IExtra) => {
+      return rapperFetch({
+        url: '/admin/addadmin',
+        method: 'POST',
+        params: req,
+        extra,
+      }) as Promise<IResponseTypes['POST/admin/addadmin']>
+    },
+
+    /**
+     * 接口名：删除用户
+     * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2062861
+     * @param req 请求参数
+     * @param extra 请求配置项
+     */
+    'GET/admin/deluser': (req?: IModels['GET/admin/deluser']['Req'], extra?: commonLib.IExtra) => {
+      return rapperFetch({
+        url: '/admin/deluser',
+        method: 'GET',
+        params: req,
+        extra,
+      }) as Promise<IResponseTypes['GET/admin/deluser']>
     },
   }
 }

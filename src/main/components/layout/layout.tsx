@@ -24,7 +24,7 @@ const HLayout = (props: any) => {
       history.replace('/login');
       message.warning('您无权访问此页面');
     }
-    if (user.token && !user.name) {
+    if (user.token && !user.username) {
       // 认为用户信息丢失
       fetch['GET/user/getuserinfo']()
         .then((res) => {
@@ -65,7 +65,7 @@ const HLayout = (props: any) => {
             <div className={Style.title}>
               <img alt="LOGO" />
               <h1>
-                <b>山票票电影购票管理中心</b>
+                <b>山票票影城管理中心</b>
               </h1>
             </div>
 
@@ -83,7 +83,9 @@ const HLayout = (props: any) => {
                 }
               >
                 <div style={{ display: 'flex', alignItems: 'center' }}>
-                  <div className={Style['user-tag']}>管理员 {user.name}</div>
+                  <div className={Style['user-tag']}>
+                    {user.address} {user.username} 管理员
+                  </div>
                 </div>
               </Dropdown>
             </div>
@@ -139,7 +141,7 @@ const HLayout = (props: any) => {
             )}
             <img alt="LOGO" />
             <h1>
-              <b>山票票电影购票系统</b>
+              <b>山票票影城购票系统</b>
             </h1>
           </div>
 
@@ -181,7 +183,7 @@ const HLayout = (props: any) => {
                   size="large"
                   icon={<img src={user.avatarURL} alt="头像" />}
                 />
-                <div className={Style['user-tag']}>{user.name}</div>
+                <div className={Style['user-tag']}>{user.username}</div>
               </div>
             </Dropdown>
           </div>

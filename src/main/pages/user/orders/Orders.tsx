@@ -68,7 +68,7 @@ const Orders = (props: any) => {
     });
   };
 
-  const columns: ColumnsType<Record<string, any>> = [
+  const columns: ColumnsType<IRecordData> = [
     { title: '电影院', dataIndex: 'cinema', align: 'center' },
     { title: '放映厅', dataIndex: 'hall', align: 'center' },
     { title: '开映时间', dataIndex: 'time', align: 'center' },
@@ -77,9 +77,7 @@ const Orders = (props: any) => {
       dataIndex: 'selectedSeats',
       align: 'center',
       render: (value, record) =>
-        (record as IRecordData).selectedSeats.map(
-          (v) => `${v.row}排${v.line}座 `
-        ),
+        record.selectedSeats.map((v) => `${v.row}排${v.line}座 `),
     },
     { title: '支付价格', dataIndex: 'totalPrice', align: 'center' },
     {
@@ -96,12 +94,12 @@ const Orders = (props: any) => {
       title: '操作',
       align: 'center',
       render: (value, record) => {
-        if ((record as IRecordData).status === 0) {
+        if (record.status === 0) {
           // 已支付
           return (
             <Button
               type="link"
-              onClick={() => handleRefund(record as IRecordData)}
+              onClick={() => handleRefund(record)}
               // loading={refundLoading}
             >
               退票
@@ -117,7 +115,7 @@ const Orders = (props: any) => {
     <div>
       <h2>我的订单</h2>
       <div className={Style.table}>
-        <Table
+        <Table<IRecordData>
           loading={loading}
           dataSource={data?.map((v) => ({ ...v, key: v.orderID }))}
           columns={columns}
