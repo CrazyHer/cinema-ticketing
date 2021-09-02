@@ -1,4 +1,4 @@
-/* md5: 1e4d279fc8f8d903b48e0299a07a1684 */
+/* md5: 6d7258d63eab1ed3305b9c31378b5744 */
 /* Rap仓库id: 288782 */
 /* Rapper版本: 1.2.2 */
 /* eslint-disable */
@@ -78,9 +78,7 @@ export interface IModels {
    * Rap 地址: http://rap2.taobao.org/repository/editor?id=288782&mod=471651&itf=2055387
    */
   'GET/user/gethotfilms': {
-    Req: {
-      address: string[]
-    }
+    Req: {}
     Res: {
       code: number
       message: string
@@ -499,7 +497,7 @@ export interface IModels {
       data: {
         userID: string
         username: string
-        role: string
+        character: string
         address: string
       }[]
     }

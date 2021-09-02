@@ -3,31 +3,15 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/display-name */
-import {
-  Drawer,
-  message,
-  Table,
-  Button,
-  Form,
-  Input,
-  Select,
-  DatePicker,
-  Cascader,
-} from 'antd';
+import { Drawer, message, Table, Button, Form, Input, Cascader } from 'antd';
 import { ColumnsType } from 'antd/es/table/interface';
 import { useForm } from 'antd/lib/form/Form';
 import { inject, observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
-import { createFromIconfontCN } from '@ant-design/icons';
-import { Moment } from 'moment';
-import { fetch, Models } from '../../../rapper';
+import { fetch } from '../../../rapper';
 import Style from './Users.module.css';
 import Admin from '../../../mobxStore/admin';
 import User from '../../../mobxStore/user';
-
-const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_2764124_m58gtcntoj7.js',
-});
 
 interface IFormData {
   username: string;
@@ -41,7 +25,7 @@ interface IFormData {
 interface IRecordData {
   userID: string;
   username: string;
-  role: string;
+  character: string;
   address: string;
 }
 
@@ -117,9 +101,9 @@ const Users = (props: any) => {
     { title: '名称', dataIndex: 'username' },
     {
       title: '权限',
-      dataIndex: 'role',
+      dataIndex: 'character',
       render: (value, record) =>
-        record.role === 'admin' ? '分店管理员' : '普通用户',
+        record.character === 'admin' ? '分店管理员' : '普通用户',
     },
     { title: '所在地区', dataIndex: 'address' },
     {
