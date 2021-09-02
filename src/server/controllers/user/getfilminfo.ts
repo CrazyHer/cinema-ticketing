@@ -3,6 +3,7 @@ import authToken from '../../services/authToken';
 import getFilm from '../../services/getFilm';
 import getFilmArrangements from '../../services/getFilmArrangements';
 import { Models } from '../../utils/rapper';
+import { servername } from '../../config.json';
 
 export default async (ctx: Context) => {
   const { token } = ctx.request.header;
@@ -26,9 +27,9 @@ export default async (ctx: Context) => {
     },
   };
   try {
-    await authToken(token);
+    const userID = await authToken(token);
     const filmData = await getFilm(data.IMDb);
-    const arrangements = await getFilmArrangements(data.IMDb);
+    const arrangements = await getFilmArrangements(data.IMDb, userID);
     body.data = {
       zhName: filmData.zh_name,
       enName: filmData.en_name,
@@ -39,8 +40,8 @@ export default async (ctx: Context) => {
       IMDb: filmData.IMDb,
       actor: filmData.actor,
       boxOffice: filmData.boxOffice,
-      posterURL: filmData.poster_url,
-      photosURL: filmData.photos_url,
+      posterURL: `${servername}/${filmData.poster_url}`,
+      photosURL: filmData.photos_url.map((v) => `${servername}/${v}`),
       breif: filmData.brief,
     };
     body.code = 0;

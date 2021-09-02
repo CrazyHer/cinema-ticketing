@@ -3,15 +3,9 @@ import authToken from '../../services/authToken';
 import mysql from '../../utils/mysql';
 import { Models } from '../../utils/rapper';
 
-// 删除放映厅后，相关的排片也被删除、还没有完成的订单状态设置为已完成1
-const queryDeleteHallStr = `
-DELETE FROM hall
-WHERE hall_id = ?;
-`;
-
 const queryDeleteArrangementStr = `
 DELETE FROM arrangement
-WHERE hall_id = ?;
+WHERE arrangement_id = ?;
 `;
 
 const queryUpdateOrderlistStr = `
@@ -25,16 +19,16 @@ WHERE arrangement_id not in (
 
 export default async (ctx: Context) => {
   const { token } = ctx.request.header;
-  const data: Models['GET/admin/delhall']['Req'] = ctx.request.body;
-  const body: Models['GET/admin/delhall']['Res'] = {
+  const { arrangementID } = ctx.request.query;
+  const body: Models['GET/admin/delarrangement']['Res'] = {
     code: -1,
     message: '',
   };
   try {
     const userID = await authToken(token);
 
-    await mysql.execute(queryDeleteHallStr, [data.hallID]);
-    await mysql.execute(queryDeleteArrangementStr, [data.hallID]);
+    if (!arrangementID) throw new Error('排片不存在');
+    await mysql.execute(queryDeleteArrangementStr, [Number(arrangementID)]);
     await mysql.execute(queryUpdateOrderlistStr);
 
     body.code = 0;

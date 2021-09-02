@@ -1,4 +1,5 @@
 import { Context } from 'koa';
+import { servername } from '../../config.json';
 import authToken from '../../services/authToken';
 import { Models } from '../../utils/rapper';
 import cities from '../../resources/cities.json';
@@ -34,7 +35,7 @@ export default async (ctx: Context) => {
     body.data = {
       character: userData.character,
       username: userData.username,
-      avatarURL: userData.avatar_url,
+      avatarURL: `${servername}/${userData.avatar_url}`,
       phone: userData.phone,
       email: userData.email,
       address: JSON.parse(userData.address),

@@ -15,7 +15,7 @@ export default async (ctx: Context) => {
   };
   try {
     const userID = await authToken(token);
-    const avatarUrl = path.join(public_dir, 'img', userID);
+    const avatarUrl = path.join(public_dir, 'avatar', userID);
     if (data.imgSrc) {
       await imageWriter(data.imgSrc, avatarUrl);
     }

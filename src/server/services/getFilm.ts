@@ -1,5 +1,17 @@
 import mysql from '../utils/mysql';
 
+const queryFilmStr = `
+'select * from film where IMDb = ?'
+`;
+const queryBoxOfficeStr = `
+select sum(orderlist.total_price) as boxOffice
+from orderlist, arrangement
+where
+  orderlist.status = 0 and
+  orderlist.arrangement_id = arrangement.arrangement_id and
+  arrangement.IMDb = ?
+`;
+
 export default async (
   IMDb: string
 ): Promise<{
@@ -15,14 +27,14 @@ export default async (
   photos_url: string[];
   brief: string;
 }> => {
-  const [rows]: any = await mysql.execute('select * from film where IMDb = ?', [
-    IMDb,
-  ]);
-  const filmData = rows[0];
+  const [filmRows]: any = await mysql.execute(queryFilmStr, [IMDb]);
+  const filmData = filmRows[0];
+  const [boxOfficeRows]: any = await mysql.execute(queryBoxOfficeStr, [IMDb]);
+  const boxOffice = Number(boxOfficeRows[0].boxOffice);
   if (!filmData) throw new Error('电影信息不存在');
   return {
     ...filmData,
-    boxOffice: Number(filmData.boxOffice),
+    boxOffice,
     photos_url: JSON.parse(filmData.photos_url),
   };
 };

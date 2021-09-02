@@ -4,7 +4,19 @@ import authToken from '../../services/authToken';
 import mysql from '../../utils/mysql';
 import { Models } from '../../utils/rapper';
 
-const querystr = `
+// 为座位加锁
+const querySeatStr = `
+select seats from arrangement where arrangement_id = ? for update
+`;
+
+const queryUpdateSeatStr = `
+UPDATE arrangement
+SET
+seats = ?,
+WHERE arrangement_id = ?;
+`;
+
+const queryInsertOrderStr = `
 INSERT INTO orderlist
 (
 user_id,
@@ -31,15 +43,50 @@ export default async (ctx: Context) => {
   };
   try {
     const userID = await authToken(token);
+    const mysqlcon = await mysql.getConnection();
+    try {
+      // 开始事务
+      await mysqlcon.beginTransaction();
+      // 查询座位情况并加锁
+      const [seatRows]: any = await mysqlcon.execute(querySeatStr, [
+        data.arrangementID,
+      ]);
+      const seats: number[][] = JSON.parse(seatRows[0].seats);
 
-    await mysql.execute(querystr, [
-      userID,
-      data.arrangementID,
-      moment().format('YYYY-MM-DD HH:mm'),
-      JSON.stringify(data.selectedSeats),
-      data.price,
-      0,
-    ]);
+      // 检查所选座位是否被占用
+      for (let i = 0; i < data.selectedSeats.length; i += 1) {
+        const { row, line } = data.selectedSeats[i];
+        if (seats[row][line] !== 1) {
+          throw new Error('所选座位已被占用!');
+        }
+        seats[row][line] = 2;
+      }
+
+      // 更新座位
+      await mysqlcon.execute(queryUpdateSeatStr, [
+        JSON.stringify(seats),
+        data.arrangementID,
+      ]);
+
+      // 提交订单
+      await mysqlcon.execute(queryInsertOrderStr, [
+        userID,
+        data.arrangementID,
+        moment().format('YYYY-MM-DD HH:mm'),
+        JSON.stringify(data.selectedSeats),
+        data.price,
+        0,
+      ]);
+
+      // 结束事务
+      await mysqlcon.commit();
+    } catch (error) {
+      await mysqlcon.rollback();
+      throw error;
+    } finally {
+      mysqlcon.release();
+    }
+
     body.code = 0;
     body.message = 'success';
   } catch (error) {

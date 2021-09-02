@@ -7,8 +7,7 @@ const querystr = `
 UPDATE orderlist
 SET
 status = 2
-WHERE order_id = ? and
-user_id = ?;
+WHERE order_id = ?
 `;
 
 export default async (ctx: Context) => {
@@ -19,9 +18,9 @@ export default async (ctx: Context) => {
     message: '',
   };
   try {
-    const userID = await authToken(token);
+    await authToken(token);
 
-    await mysql.execute(querystr, [data.orderID, userID]);
+    await mysql.execute(querystr, [data.orderID]);
     body.code = 0;
     body.message = 'success';
   } catch (error) {
