@@ -25,7 +25,7 @@ export default async (ctx: Context) => {
     } else throw new Error('账号不存在或密码不正确！');
   } catch (error) {
     body.code = -1;
-    body.message = error;
+    body.message = String(error);
   } finally {
     ctx.body = body;
   }

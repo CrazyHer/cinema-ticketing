@@ -8,6 +8,7 @@ import { ColumnsType } from 'antd/es/table/interface';
 import { useForm } from 'antd/lib/form/Form';
 import { inject, observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
+import crypto from 'crypto';
 import { fetch } from '../../../rapper';
 import Style from './Users.module.css';
 import Admin from '../../../mobxStore/admin';
@@ -77,10 +78,17 @@ const Users = (props: any) => {
     }
   };
 
-  const onAddSubmit = async (e: IFormData) => {
+  const onAddSubmit = async (data: IFormData) => {
     setSubmitLoading(true);
     try {
-      const res = await fetch['POST/admin/addadmin'](e);
+      const res = await fetch['POST/admin/addadmin']({
+        ...data,
+        password: crypto
+          .createHmac('sha256', 'CrazyHer')
+          .update(data.password)
+          .digest('base64')
+          .toString(),
+      });
       if (res.code === 0) {
         message.success(`添加成功`);
         setRefreshData(!refreshData);

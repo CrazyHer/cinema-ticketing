@@ -37,7 +37,7 @@ export default async (ctx: Context) => {
       if (status === 0) {
         // 订单放映时间已超过当前时间，则订单已完成
         if (
-          moment(row.arrangementTime, 'YYYY-MM-DD HH:mm').unix() <
+          moment(row.arrangementTime, 'YYYY-MM-DD HH:mm').unix() >
           moment().unix()
         ) {
           status = 1;
@@ -57,7 +57,7 @@ export default async (ctx: Context) => {
     body.message = 'success';
   } catch (error) {
     body.code = -1;
-    body.message = error;
+    body.message = String(error);
   } finally {
     ctx.body = body;
   }

@@ -70,7 +70,7 @@ const FilmDetail = (props: any) => {
   useEffect(() => {
     if (IMDb) {
       setLoading(true);
-      fetch['GET/user/getfilminfo']()
+      fetch['GET/user/getfilminfo']({ IMDb })
         .then((res) => {
           if (res.code === 0) {
             setData(res.data as IData);

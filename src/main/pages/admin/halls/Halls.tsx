@@ -163,11 +163,11 @@ const Halls = (props: any) => {
         message.success(`添加成功`);
         setRefreshData(!refreshData);
       } else {
-        message.success(`添加失败,${res.message}`);
+        message.error(`添加失败,${res.message}`);
       }
     } catch (error) {
       console.error(error);
-      message.success(`添加失败,请求异常`);
+      message.error(`添加失败,请求异常`);
     } finally {
       setAddModalVisible(false);
       setSubmitLoading(false);
@@ -181,11 +181,11 @@ const Halls = (props: any) => {
         message.success(`修改成功`);
         setRefreshData(!refreshData);
       } else {
-        message.success(`修改失败,${res.message}`);
+        message.error(`修改失败,${res.message}`);
       }
     } catch (error) {
       console.error(error);
-      message.success(`修改失败,请求异常`);
+      message.error(`修改失败,请求异常`);
     } finally {
       setModifyModalVisible(false);
       setSubmitLoading(false);
@@ -249,7 +249,7 @@ const Halls = (props: any) => {
     <div>
       <div className={Style.btn}>
         <Button type="primary" onClick={() => handleAdd()}>
-          添加电影
+          添加放映厅
         </Button>
       </div>
       <div className={Style.table}>

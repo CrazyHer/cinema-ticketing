@@ -3,7 +3,6 @@ import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { Card, Carousel, message, Skeleton } from 'antd';
 import { inject, observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 import User from '../../../mobxStore/user';
 import { fetch, Models } from '../../../rapper';
@@ -14,10 +13,9 @@ const Index = (props: any) => {
   const [loading, setLoading] = useState(false);
   const [data, setData] =
     useState<Models['GET/user/gethotfilms']['Res']['data']>();
-  const history = useHistory();
   useEffect(() => {
     setLoading(true);
-    fetch['GET/user/gethotfilms']({ address: user.address })
+    fetch['GET/user/gethotfilms']()
       .then((res) => {
         if (res.code === 0) {
           setData(res.data.sort((a, b) => a.popularity - b.popularity));

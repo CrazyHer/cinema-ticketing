@@ -20,8 +20,8 @@ const app = async () => {
 
   const koa = new Koa();
   koa.use(cors());
-  koa.use(koabody());
-  koa.use(serve(public_dir));
+  koa.use(koabody({ formLimit: '10mb' }));
+  koa.use(serve(path.join(public_dir, '../')));
 
   // 测试mysql连接
   await mysql
@@ -49,7 +49,7 @@ const app = async () => {
   koa.use(router.routes()).use(router.allowedMethods());
   koa.listen(port);
 
-  console.log(`服务器已启动在${servername}:${port}`);
+  console.log(`服务器已启动在${servername}`);
 };
 
 const appExit = async (code = 0) => {

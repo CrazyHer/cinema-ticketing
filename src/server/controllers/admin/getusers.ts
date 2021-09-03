@@ -28,7 +28,7 @@ export default async (ctx: Context) => {
     body.message = 'success';
   } catch (error) {
     body.code = -1;
-    body.message = error;
+    body.message = String(error);
   } finally {
     ctx.body = body;
   }

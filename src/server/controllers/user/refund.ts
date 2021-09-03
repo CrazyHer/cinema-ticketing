@@ -12,7 +12,7 @@ WHERE order_id = ?
 
 export default async (ctx: Context) => {
   const { token } = ctx.request.header;
-  const data: Models['GET/user/refund']['Req'] = ctx.request.body;
+  const { orderID } = ctx.request.query;
   const body: Models['GET/user/refund']['Res'] = {
     code: -1,
     message: '',
@@ -20,12 +20,13 @@ export default async (ctx: Context) => {
   try {
     await authToken(token);
 
-    await mysql.execute(querystr, [data.orderID]);
+    if (!orderID) throw new Error('订单不存在');
+    await mysql.execute(querystr, [orderID]);
     body.code = 0;
     body.message = 'success';
   } catch (error) {
     body.code = -1;
-    body.message = error;
+    body.message = String(error);
   } finally {
     ctx.body = body;
   }

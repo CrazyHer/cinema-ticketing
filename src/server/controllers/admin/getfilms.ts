@@ -1,18 +1,12 @@
 import { Context } from 'koa';
 import authToken from '../../services/authToken';
+import getFilmBoxOffice from '../../services/getFilmBoxOffice';
 import mysql from '../../utils/mysql';
 import { Models } from '../../utils/rapper';
+import { servername } from '../../config.json';
 
 const queryStr = `
-with filmboxoffice as (
-  select sum(orderlist.total_price) as boxOffice, arrangement.IMDb as IMDb
-  from orderlist, arrangement
-  where
-  orderlist.status = 0 and
-  orderlist.arrangement_id = arrangement.arrangement_id
-  group by IMDb
-)
-select * from film natural join filmboxoffice
+select * from film
 `;
 
 export default async (ctx: Context) => {
@@ -23,9 +17,10 @@ export default async (ctx: Context) => {
     data: [],
   };
   try {
-    const userID = await authToken(token);
+    await authToken(token);
 
     const [filmRows]: any[][] = await mysql.execute(queryStr);
+    const filmBoxOffices = await getFilmBoxOffice();
     body.data = filmRows.map((filmData) => ({
       zhName: filmData.zh_name,
       enName: filmData.en_name,
@@ -34,16 +29,18 @@ export default async (ctx: Context) => {
       duration: filmData.duration,
       IMDb: filmData.IMDb,
       actor: filmData.actor,
-      boxOffice: filmData.boxOffice,
-      posterURL: filmData.poster_url,
-      photosURL: filmData.photos_url,
+      boxOffice: filmBoxOffices[filmData.IMDb] || 0,
+      posterURL: `${servername}/${filmData.poster_url}`,
+      photosURL: (JSON.parse(filmData.photos_url) as string[]).map(
+        (v) => `${servername}/${v}`
+      ),
       breif: filmData.brief,
     }));
     body.code = 0;
     body.message = 'success';
   } catch (error) {
     body.code = -1;
-    body.message = error;
+    body.message = String(error);
   } finally {
     ctx.body = body;
   }

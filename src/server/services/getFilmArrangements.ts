@@ -1,3 +1,4 @@
+import moment from 'moment';
 import mysql from '../utils/mysql';
 
 // 只查询用户本地区的排片情况
@@ -31,12 +32,15 @@ export default async (
   }[]
 > => {
   const [rows]: any[][] = await mysql.execute(querystr, [IMDb, userID]);
-  return rows.map((row) => ({
-    cinema: row.cinema,
-    hall: row.hall,
-    time: row.time,
-    seats: JSON.parse(row.seats),
-    price: Number(row.price),
-    arrangementID: row.arrangementID,
-  }));
+  // 只查询将来的排片，过去的排片不再显示
+  return rows
+    .map((row) => ({
+      cinema: row.cinema,
+      hall: row.hall,
+      time: row.time,
+      seats: JSON.parse(row.seats),
+      price: Number(row.price),
+      arrangementID: row.arrangementID,
+    }))
+    .filter((v) => moment(v.time).unix > moment().unix);
 };

@@ -1,5 +1,6 @@
 import { Context } from 'koa';
 import authToken from '../../services/authToken';
+import getFilmBoxOffice from '../../services/getFilmBoxOffice';
 import mysql from '../../utils/mysql';
 import { Models } from '../../utils/rapper';
 
@@ -33,17 +34,6 @@ group by left(time,10)
 order by date
 `;
 
-// 查询每种电影在本系统中的票房
-const queryBoxOfficeStr = `
-select film.zh_name as filmName, sum(orderlist.total_price) as value
-from film, orderlist, arrangement
-where
-  orderlist.status = 0 and
-  orderlist.arrangement_id = arrangement.arrangement_id and
-  arrangement.IMDb = film.IMDb
-group by film.zh_name
-`;
-
 // 查询各影片在本系统中的上座率
 const querySeatsStr = `
 select zh_name as filmName, seats from film natural join arrangement
@@ -71,7 +61,7 @@ export default async (ctx: Context) => {
     const [saleCountRows]: any = await mysql.execute(querySaleCountStr, [
       userID,
     ]);
-    body.data.sales = saleCountRows[0].saleCount;
+    body.data.sales = saleCountRows[0].saleCount || 0;
 
     const [dailySalesRows]: any[][] = await mysql.execute(queryDailySaleStr, [
       userID,
@@ -81,10 +71,11 @@ export default async (ctx: Context) => {
       value: v.value,
     }));
 
-    const [boxOfficeRows]: any[][] = await mysql.execute(queryBoxOfficeStr);
-    body.data.boxOffice = boxOfficeRows.map((v) => ({
-      filmName: v.filmName,
-      value: v.value,
+    // 只统计有票房的电影
+    const filmBoxOffices = await getFilmBoxOffice();
+    body.data.boxOffice = Object.keys(filmBoxOffices).map((key) => ({
+      value: filmBoxOffices[key],
+      filmName: key,
     }));
 
     const [seatsRows]: any[][] = await mysql.execute(querySeatsStr);
@@ -109,8 +100,7 @@ export default async (ctx: Context) => {
         filmSeats[filmName].total += total;
         filmSeats[filmName].used += used;
       } else {
-        filmSeats[filmName].total = total;
-        filmSeats[filmName].used = used;
+        filmSeats[filmName] = { total, used };
       }
     }
     const keys = Object.keys(filmSeats);
@@ -131,7 +121,7 @@ export default async (ctx: Context) => {
     body.message = 'success';
   } catch (error) {
     body.code = -1;
-    body.message = error;
+    body.message = String(error);
   } finally {
     ctx.body = body;
   }

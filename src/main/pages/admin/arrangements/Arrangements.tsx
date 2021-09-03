@@ -12,6 +12,7 @@ import {
   Input,
   Select,
   DatePicker,
+  Popover,
 } from 'antd';
 import { ColumnsType } from 'antd/es/table/interface';
 import { useForm } from 'antd/lib/form/Form';
@@ -168,7 +169,26 @@ const Arrangements = (props: any) => {
             }
           }
         }
-        return `${used} / ${count}`;
+        return (
+          <Popover
+            content={record.seats.map((v, i) => (
+              <div key={i} className={Style.seatRow}>
+                {v.map((sv, si) => (
+                  <div key={si}>
+                    {sv === 0 ? (
+                      <IconFont type="icon-SeatDisabled" />
+                    ) : (
+                      <IconFont type="icon-SeatAvailable" />
+                    )}
+                  </div>
+                ))}
+              </div>
+            ))}
+            title="座位情况"
+          >
+            {used} / {count}
+          </Popover>
+        );
       },
     },
     { title: '票价', dataIndex: 'price' },
@@ -191,7 +211,7 @@ const Arrangements = (props: any) => {
     <div>
       <div className={Style.btn}>
         <Button type="primary" onClick={() => handleAdd()}>
-          添加电影
+          添加排片
         </Button>
       </div>
       <div className={Style.table}>

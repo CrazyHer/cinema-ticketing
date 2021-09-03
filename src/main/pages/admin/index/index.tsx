@@ -86,9 +86,13 @@ const Index = (props: any) => {
         <Statistic title="总用户数" value={data?.users} loading={loading} />
       </Card>
       <Card>
-        <Statistic title="总销售额" value={data?.sales} loading={loading} />
+        <Statistic
+          title="总销售额 (元)"
+          value={data?.sales}
+          loading={loading}
+        />
       </Card>
-      <Card loading={loading} title="每日销售额">
+      <Card loading={loading} title="每日销售额 (元)">
         <Line {...dailySalesConfig} />
       </Card>
       <Card loading={loading} title="票房排行">

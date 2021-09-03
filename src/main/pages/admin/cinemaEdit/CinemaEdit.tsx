@@ -30,7 +30,14 @@ const CinemaEdit = (props: any) => {
         phone: e.phone,
       });
       if (res.code === 0) {
-        message.success('修改成功');
+        // 重新获取用户信息
+        const userInfoRes = await fetch['GET/user/getuserinfo']();
+        user.setUserInfo(userInfoRes.data);
+        if (userInfoRes.code === 0) {
+          message.success('修改成功');
+        } else {
+          message.error(`修改失败,${res.message}`);
+        }
       } else {
         message.error(`修改失败,${res.message}`);
       }

@@ -12,7 +12,7 @@ select seats from arrangement where arrangement_id = ? for update
 const queryUpdateSeatStr = `
 UPDATE arrangement
 SET
-seats = ?,
+seats = ?
 WHERE arrangement_id = ?;
 `;
 
@@ -26,7 +26,7 @@ selected_seats,
 total_price,
 status)
 VALUES
-?,
+(?,
 ?,
 ?,
 ?,
@@ -91,7 +91,7 @@ export default async (ctx: Context) => {
     body.message = 'success';
   } catch (error) {
     body.code = -1;
-    body.message = error;
+    body.message = String(error);
   } finally {
     ctx.body = body;
   }

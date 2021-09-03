@@ -19,10 +19,12 @@ const HLayout = (props: any) => {
     // 检查登录状态，若未登录则跳转登录页面
     if (user.token === '' && pathname !== '/login') {
       history.replace('/login');
+      return;
     }
     if (user.character !== 'admin' && pathname.match('admin')) {
       history.replace('/login');
       message.warning('您无权访问此页面');
+      return;
     }
     if (user.token && !user.username) {
       // 认为用户信息丢失
@@ -41,6 +43,15 @@ const HLayout = (props: any) => {
 
   const handleLogoff = () => {
     user.setToken('');
+    user.setUserInfo({
+      character: '',
+      username: '',
+      avatarURL: '',
+      phone: '',
+      email: '',
+      address: [],
+      availableCities: [],
+    });
   };
 
   if (pathname === '/login') return <>{children}</>;

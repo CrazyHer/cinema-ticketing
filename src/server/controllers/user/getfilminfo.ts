@@ -7,7 +7,7 @@ import { servername } from '../../config.json';
 
 export default async (ctx: Context) => {
   const { token } = ctx.request.header;
-  const data = ctx.request.query as Models['GET/user/getfilminfo']['Req'];
+  const { IMDb } = ctx.request.query as Models['GET/user/getfilminfo']['Req'];
   const body: Models['GET/user/getfilminfo']['Res'] = {
     code: -1,
     message: '',
@@ -28,8 +28,11 @@ export default async (ctx: Context) => {
   };
   try {
     const userID = await authToken(token);
-    const filmData = await getFilm(data.IMDb);
-    const arrangements = await getFilmArrangements(data.IMDb, userID);
+
+    if (!IMDb) throw new Error('电影不存在');
+
+    const filmData = await getFilm(IMDb);
+    const arrangements = await getFilmArrangements(IMDb, userID);
     body.data = {
       zhName: filmData.zh_name,
       enName: filmData.en_name,
@@ -48,7 +51,7 @@ export default async (ctx: Context) => {
     body.message = 'success';
   } catch (error) {
     body.code = -1;
-    body.message = error;
+    body.message = String(error);
   } finally {
     ctx.body = body;
   }

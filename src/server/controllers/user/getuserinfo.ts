@@ -30,7 +30,7 @@ export default async (ctx: Context) => {
 
     const [rows]: any = await mysql.execute(querystr, [userID]);
     const userData = rows[0];
-    if (userData) throw new Error('用户不存在');
+    if (!userData) throw new Error('用户不存在');
 
     body.data = {
       character: userData.character,
@@ -45,7 +45,7 @@ export default async (ctx: Context) => {
     body.message = 'success';
   } catch (error) {
     body.code = -1;
-    body.message = error;
+    body.message = String(error);
   } finally {
     ctx.body = body;
   }

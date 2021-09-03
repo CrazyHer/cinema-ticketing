@@ -148,10 +148,10 @@ const Films = (props: any) => {
     const src = await getFileBase64(file);
     setPosterSrc(src);
     if (addModalVisible) {
-      addForm.setFieldsValue({ posterURL: posterSrc });
+      addForm.setFieldsValue({ posterURL: src });
     }
     if (modifyModalVisible) {
-      modifyForm.setFieldsValue({ posterURL: posterSrc });
+      modifyForm.setFieldsValue({ posterURL: src });
     }
     return false;
   };
@@ -173,10 +173,10 @@ const Films = (props: any) => {
     const src = (await getFileBase64(file)) as string;
     setPhotosSrcList([...photosSrcList, src]);
     if (addModalVisible) {
-      addForm.setFieldsValue({ photosURL: photosSrcList });
+      addForm.setFieldsValue({ photosURL: [...photosSrcList, src] });
     }
     if (modifyModalVisible) {
-      modifyForm.setFieldsValue({ photosURL: photosSrcList });
+      modifyForm.setFieldsValue({ photosURL: [...photosSrcList, src] });
     }
     return false;
   };
@@ -278,7 +278,7 @@ const Films = (props: any) => {
           <Form.Item name="photosURL" hidden />
           <Form.Item label="剧照">
             <div className="photosUpload">
-              {photosSrcList.map((v, i) => (
+              {photosSrcList?.map((v, i) => (
                 <img
                   key={i}
                   width="128px"

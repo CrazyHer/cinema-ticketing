@@ -1,20 +1,15 @@
 import mysql from '../utils/mysql';
 
-const querystr = `
-INSERT INTO filmticketing.user
-(user_id,
-username,
-avatar_url,
-phone,
-email,
-address)
-VALUES
-(?,
-?,
-?,
-?,
-?,
-?);`;
+const queryStr = `
+UPDATE user
+SET
+username = ?,
+avatar_url = ?,
+phone = ?,
+email = ?,
+address = ?
+WHERE user_id = ?;
+`;
 
 export default async (userInfo: {
   userID: string;
@@ -25,16 +20,16 @@ export default async (userInfo: {
   address: string[];
 }) => {
   const [row]: any = await mysql.execute(
-    'select userID from user where userID = ?',
+    'select user_id from user where user_id = ?',
     [userInfo.userID]
   );
   if (!row[0]) throw new Error('用户不存在');
-  await mysql.execute(querystr, [
-    userInfo.userID,
+  await mysql.execute(queryStr, [
     userInfo.username,
     userInfo.avatar_url,
     userInfo.phone,
     userInfo.email,
     JSON.stringify(userInfo.address),
+    userInfo.userID,
   ]);
 };

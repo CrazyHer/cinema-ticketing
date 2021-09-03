@@ -29,14 +29,14 @@ export default async (ctx: Context) => {
     await mysql.execute(queryInsertStr, [
       data.hallName,
       JSON.stringify(data.seats),
-      data.comment,
+      data.comment || '',
       userID,
     ]);
     body.code = 0;
     body.message = 'success';
   } catch (error) {
     body.code = -1;
-    body.message = error;
+    body.message = String(error);
   } finally {
     ctx.body = body;
   }

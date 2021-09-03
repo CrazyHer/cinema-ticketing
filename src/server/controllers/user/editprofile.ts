@@ -15,13 +15,13 @@ export default async (ctx: Context) => {
   };
   try {
     const userID = await authToken(token);
-    const avatarUrl = path.join(public_dir, 'avatar', userID);
+    const avatarUrl = path.join(public_dir, 'avatar', `${userID}.png`);
     if (data.imgSrc) {
       await imageWriter(data.imgSrc, avatarUrl);
     }
     await updateUser({
       address: data.address,
-      avatar_url: `public/img/${userID}`,
+      avatar_url: `public/avatar/${userID}.png`,
       email: data.email,
       phone: data.phone,
       userID,
@@ -31,7 +31,7 @@ export default async (ctx: Context) => {
     body.message = 'success';
   } catch (error) {
     body.code = -1;
-    body.message = error;
+    body.message = String(error);
   } finally {
     ctx.body = body;
   }

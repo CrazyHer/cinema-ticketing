@@ -13,21 +13,22 @@ delete from orderlist where user_id = ?
 `;
 export default async (ctx: Context) => {
   const { token } = ctx.request.header;
-  const data: Models['GET/admin/deluser']['Req'] = ctx.request.body;
+  const { userID } = ctx.request.query;
   const body: Models['GET/admin/deluser']['Res'] = {
     code: -1,
     message: '',
   };
   try {
     await authToken(token);
+    if (!userID) throw new Error('用户不存在');
 
-    await mysql.execute(queryDeleteUserStr, [data.userID]);
-    await mysql.execute(queryDeleteOrderStr, [data.userID]);
+    await mysql.execute(queryDeleteUserStr, [userID]);
+    await mysql.execute(queryDeleteOrderStr, [userID]);
     body.code = 0;
     body.message = 'success';
   } catch (error) {
     body.code = -1;
-    body.message = error;
+    body.message = String(error);
   } finally {
     ctx.body = body;
   }

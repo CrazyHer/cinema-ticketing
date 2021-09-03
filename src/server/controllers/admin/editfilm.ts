@@ -30,32 +30,32 @@ export default async (ctx: Context) => {
     message: '',
   };
   try {
-    const userID = await authToken(token);
+    await authToken(token);
 
     // 剧照和电影海报按IMDb放入对应文件夹
-    const posterURL = `public/poster/${data.IMDb}`;
-    await imageWriter(
-      data.posterURL,
-      path.join(public_dir, 'poster', data.IMDb)
-    );
+    const posterURL = `public/poster/${data.IMDb}.png`;
+    if (data.posterURL?.length > 1000) {
+      await imageWriter(
+        data.posterURL,
+        path.join(public_dir, 'poster', `${data.IMDb}.png`)
+      );
+    }
 
     if (!fs.existsSync(path.join(public_dir, 'photos', data.IMDb)))
       fs.mkdirSync(path.join(public_dir, 'photos', data.IMDb), {
         recursive: true,
       });
     const photosURL: string[] = [];
-    for (let i = 0; i < data.photosURL.length; i += 1) {
+    for (let i = 0; i < data.photosURL?.length; i += 1) {
       // 判断是否为base64，如果是，写为文件，否则直接存储在数据库中不改变
-      if (data.photosURL[i].length > 100) {
+      if (data.photosURL[i]?.length > 1000) {
         // eslint-disable-next-line no-await-in-loop
         await imageWriter(
           data.photosURL[i],
-          path.join(public_dir, 'photos', data.IMDb, `${i}`)
+          path.join(public_dir, 'photos', data.IMDb, `${i}.png`)
         );
-        photosURL.push(`public/photos/${data.IMDb}/${i}`);
-      } else {
-        photosURL.push(`${data.photosURL[i]}`);
       }
+      photosURL.push(`public/photos/${data.IMDb}/${i}.png`);
     }
 
     await mysql.execute(queryStr, [
@@ -74,7 +74,7 @@ export default async (ctx: Context) => {
     body.message = 'success';
   } catch (error) {
     body.code = -1;
-    body.message = error;
+    body.message = String(error);
   } finally {
     ctx.body = body;
   }

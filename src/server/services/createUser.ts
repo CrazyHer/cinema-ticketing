@@ -1,10 +1,10 @@
 import mysql from '../utils/mysql';
 
 const querystr = `
-INSERT INTO filmticketing.user
+INSERT INTO user
 (user_id,
 password,
-character,
+\`character\`,
 username,
 avatar_url,
 phone,
@@ -31,10 +31,11 @@ export default async (userInfo: {
   address: string[];
 }) => {
   const [row]: any = await mysql.execute(
-    'select userID from user where userID = ?',
+    'select user_id from user where user_id = ?',
     [userInfo.userID]
   );
   if (row[0]) throw new Error('用户已存在');
+  if (!userInfo.address[0]) userInfo.address = ['山东', '济南'];
   await mysql.execute(querystr, [
     userInfo.userID,
     userInfo.password,

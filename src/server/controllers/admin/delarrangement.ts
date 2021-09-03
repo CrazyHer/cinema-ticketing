@@ -25,7 +25,7 @@ export default async (ctx: Context) => {
     message: '',
   };
   try {
-    const userID = await authToken(token);
+    await authToken(token);
 
     if (!arrangementID) throw new Error('排片不存在');
     await mysql.execute(queryDeleteArrangementStr, [Number(arrangementID)]);
@@ -35,7 +35,7 @@ export default async (ctx: Context) => {
     body.message = 'success';
   } catch (error) {
     body.code = -1;
-    body.message = error;
+    body.message = String(error);
   } finally {
     ctx.body = body;
   }

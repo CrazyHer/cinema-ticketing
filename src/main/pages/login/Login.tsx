@@ -27,7 +27,7 @@ const Login = (props: any) => {
       if (user.character === 'user') history.replace('/user');
       else if (user.character === 'admin') history.replace('/admin');
     }
-  }, [user.token]);
+  }, []);
 
   const [registerForm] = useForm<IRegisterFormData>();
   const [loginForm] = useForm<ILoginFormData>();
@@ -46,9 +46,18 @@ const Login = (props: any) => {
       });
       if (res.code === 0) {
         const { token } = res.data;
-        user.setUserInfo((await fetch['GET/user/getuserinfo']()).data);
         user.setLoginFormData(formData);
         user.setToken(token);
+        // 登录成功后获取用户信息
+        const userInfoRes = await fetch['GET/user/getuserinfo']();
+        if (userInfoRes.code === 0) {
+          user.setUserInfo(userInfoRes.data);
+          if (user.character === 'user') history.replace('/user');
+          else if (user.character === 'admin') history.replace('/admin');
+        } else {
+          message.warn(`登陆失败,${userInfoRes.message}`);
+          console.log(userInfoRes);
+        }
       } else {
         message.warn(`登陆失败,${res.message}`);
         console.log(res);

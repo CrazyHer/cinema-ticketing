@@ -4,7 +4,7 @@ import mysql from '../../utils/mysql';
 import { Models } from '../../utils/rapper';
 
 const queryStr = `
-select * from hall
+select * from hall where cinema_id = ?
 `;
 
 export default async (ctx: Context) => {
@@ -17,7 +17,7 @@ export default async (ctx: Context) => {
   try {
     const userID = await authToken(token);
 
-    const [rows]: any[][] = await mysql.execute(queryStr);
+    const [rows]: any[][] = await mysql.execute(queryStr, [userID]);
     body.data = rows.map((v) => ({
       hallID: v.hall_id,
       hallName: v.name,
@@ -28,7 +28,7 @@ export default async (ctx: Context) => {
     body.message = 'success';
   } catch (error) {
     body.code = -1;
-    body.message = error;
+    body.message = String(error);
   } finally {
     ctx.body = body;
   }

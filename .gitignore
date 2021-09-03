@@ -54,3 +54,6 @@ npm-debug.log.*
 
 # sensetive server config
 src/server/config.json
+
+# server public dir
+public

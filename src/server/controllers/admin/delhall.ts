@@ -31,7 +31,7 @@ export default async (ctx: Context) => {
     message: '',
   };
   try {
-    const userID = await authToken(token);
+    await authToken(token);
 
     await mysql.execute(queryDeleteHallStr, [data.hallID]);
     await mysql.execute(queryDeleteArrangementStr, [data.hallID]);
@@ -41,7 +41,7 @@ export default async (ctx: Context) => {
     body.message = 'success';
   } catch (error) {
     body.code = -1;
-    body.message = error;
+    body.message = String(error);
   } finally {
     ctx.body = body;
   }

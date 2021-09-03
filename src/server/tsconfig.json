@@ -12,5 +12,6 @@
     "resolveJsonModule": true,
     "allowJs": true
   },
+  "include": ["../server/*"],
   "exclude": ["node_modules"]
 }

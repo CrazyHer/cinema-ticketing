@@ -3,6 +3,7 @@ import { overrideFetch } from '.';
 
 // 使用axios重写请求方法
 const customFetch = (token: string) => {
+  const baseURL = 'http://localhost:2333';
   overrideFetch(
     ({ url, method, params }) =>
       new Promise<any>((resolve, reject) => {
@@ -13,13 +14,13 @@ const customFetch = (token: string) => {
                 method,
                 url,
                 data: params,
-                baseURL: 'http://rap2api.taobao.org/app/mock/288782',
+                baseURL,
               }
             : {
                 method,
                 url,
                 params,
-                baseURL: 'http://rap2api.taobao.org/app/mock/288782',
+                baseURL,
               };
         axios(
           // 登录接口请求头不附带token

@@ -30,7 +30,7 @@ export default async (ctx: Context) => {
     message: '',
   };
   try {
-    const userID = await authToken(token);
+    await authToken(token);
 
     const [seatRows]: any = await mysql.execute(querySeatsStr, [data.hallID]);
     if (!seatRows[0]) throw new Error('放映厅不存在');
@@ -47,7 +47,7 @@ export default async (ctx: Context) => {
     body.message = 'success';
   } catch (error) {
     body.code = -1;
-    body.message = error;
+    body.message = String(error);
   } finally {
     ctx.body = body;
   }
