@@ -10,7 +10,7 @@ import Style from './Orders.module.css';
 interface IRecordData {
   orderID: number;
   userID: string;
-  cinema: string;
+  filmName: string;
   hall: string;
   time: string;
   selectedSeats: {
@@ -74,11 +74,11 @@ const Orders = (props: any) => {
 
   const columns: ColumnsType<IRecordData> = [
     { title: '用户ID', dataIndex: 'userID', align: 'center' },
-    { title: '影院名称', dataIndex: 'cinema', align: 'center' },
+    { title: '电影名称', dataIndex: 'filmName', align: 'center' },
     { title: '放映厅', dataIndex: 'hall', align: 'center' },
     { title: '时间', dataIndex: 'time', align: 'center' },
     {
-      title: '座位',
+      title: '所选座位',
       dataIndex: 'selectedSeats',
       align: 'center',
       render: (value, record) =>

@@ -1,4 +1,4 @@
-/* md5: 6d7258d63eab1ed3305b9c31378b5744 */
+/* md5: a908b0f4e750b2782a0ed4fd8d30579c */
 /* Rap仓库id: 288782 */
 /* Rapper版本: 1.2.2 */
 /* eslint-disable */
@@ -472,7 +472,7 @@ export interface IModels {
       data: {
         orderID: number
         userID: string
-        cinema: string
+        filmName: string
         hall: string
         time: string
         selectedSeats: {
