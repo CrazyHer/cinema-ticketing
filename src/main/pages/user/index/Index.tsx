@@ -18,7 +18,7 @@ const Index = (props: any) => {
     fetch['GET/user/gethotfilms']()
       .then((res) => {
         if (res.code === 0) {
-          setData(res.data.sort((a, b) => a.popularity - b.popularity));
+          setData(res.data);
         } else {
           message.error(`获取电影信息失败,${res.message}`);
         }
@@ -42,30 +42,39 @@ const Index = (props: any) => {
             nextArrow={<RightOutlined />}
             prevArrow={<LeftOutlined />}
           >
-            {data?.slice(0, data.length < 4 ? data.length - 1 : 4).map((v) => (
+            {data?.slice(0, data.length < 4 ? data.length : 4).map((v) => (
               <Link key={v.IMDb} to={`/user/filmdetail?IMDb=${v.IMDb}`}>
-                <img src={v.posterURL} alt={v.name} />
+                <img
+                  className={Style.carouselItem}
+                  src={v.posterURL}
+                  alt={v.name}
+                />
               </Link>
             ))}
           </Carousel>
         </div>
         <div>
           <h2>票房排行</h2>
-          {data?.map((v) => (
-            <Link
-              className={Style.filmCard}
-              key={v.IMDb}
-              to={`/user/filmdetail?IMDb=${v.IMDb}`}
-            >
-              <Card
-                hoverable
-                style={{ width: 240 }}
-                cover={<img alt={v.IMDb} src={v.posterURL} />}
+          <div className={Style.rankList}>
+            {data?.map((v) => (
+              <Link
+                className={Style.filmCard}
+                key={v.IMDb}
+                to={`/user/filmdetail?IMDb=${v.IMDb}`}
               >
-                <Card.Meta title={v.name} />
-              </Card>
-            </Link>
-          ))}
+                <Card
+                  hoverable
+                  style={{ width: 240 }}
+                  cover={<img alt={v.IMDb} src={v.posterURL} />}
+                >
+                  <Card.Meta
+                    title={v.name}
+                    description={`票房：${v.popularity}`}
+                  />
+                </Card>
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
     </Skeleton>

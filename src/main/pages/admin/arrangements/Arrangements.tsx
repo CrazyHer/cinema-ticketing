@@ -20,7 +20,7 @@ import { inject, observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import { createFromIconfontCN } from '@ant-design/icons';
 import { Moment } from 'moment';
-import { fetch, Models } from '../../../rapper';
+import { fetch } from '../../../rapper';
 import Style from './Arrangements.module.css';
 import Admin from '../../../mobxStore/admin';
 
@@ -51,7 +51,6 @@ const Arrangements = (props: any) => {
   const [refreshData, setRefreshData] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [addModalVisible, setAddModalVisible] = useState(false);
-  const [dropdownLoading, setDropdownLoading] = useState(false);
   const [addForm] = useForm<IFormData>();
 
   // 刷新排片列表
@@ -149,6 +148,48 @@ const Arrangements = (props: any) => {
     }
   };
 
+  const renderSeatInfo = (value: any, record: IRecordData) => {
+    let count = 0; // 座位总数
+    let used = 0; // 上座人数
+    for (let i = 0; i < record.seats.length; i += 1) {
+      for (let j = 0; j < record.seats[i].length; j += 1) {
+        if (record.seats[i][j] === 2) {
+          used += 1;
+        }
+        if (record.seats[i][j] !== 0) {
+          count += 1;
+        }
+      }
+    }
+    return (
+      <Popover
+        content={
+          <div className={Style.seatInfoWrapper}>
+            <div className={Style.screen}>屏幕中央</div>
+            {record.seats.map((v, i) => (
+              <div key={i} className={Style.seatRow}>
+                {v.map((sv, si) => (
+                  <div key={si}>
+                    {sv === 0 ? (
+                      <IconFont type="icon-SeatDisabled" />
+                    ) : sv === 1 ? (
+                      <IconFont type="icon-SeatAvailable" />
+                    ) : (
+                      <IconFont type="icon-SeatDefault" />
+                    )}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        }
+        title="座位情况"
+      >
+        {used} / {count}
+      </Popover>
+    );
+  };
+
   const columns: ColumnsType<IRecordData> = [
     { title: '电影名称', dataIndex: 'filmName' },
     { title: '放映厅', dataIndex: 'hall' },
@@ -156,40 +197,7 @@ const Arrangements = (props: any) => {
     {
       title: '座位情况',
       dataIndex: 'seats',
-      render: (value, record) => {
-        let count = 0; // 座位总数
-        let used = 0; // 上座人数
-        for (let i = 0; i < record.seats.length; i += 1) {
-          for (let j = 0; j < record.seats[i].length; j += 1) {
-            if (record.seats[i][j] === 2) {
-              used += 1;
-            }
-            if (record.seats[i][j] !== 0) {
-              count += 1;
-            }
-          }
-        }
-        return (
-          <Popover
-            content={record.seats.map((v, i) => (
-              <div key={i} className={Style.seatRow}>
-                {v.map((sv, si) => (
-                  <div key={si}>
-                    {sv === 0 ? (
-                      <IconFont type="icon-SeatDisabled" />
-                    ) : (
-                      <IconFont type="icon-SeatAvailable" />
-                    )}
-                  </div>
-                ))}
-              </div>
-            ))}
-            title="座位情况"
-          >
-            {used} / {count}
-          </Popover>
-        );
-      },
+      render: renderSeatInfo,
     },
     { title: '票价', dataIndex: 'price' },
     {
@@ -208,7 +216,7 @@ const Arrangements = (props: any) => {
   ];
 
   return (
-    <div>
+    <div className={Style.body}>
       <div className={Style.btn}>
         <Button type="primary" onClick={() => handleAdd()}>
           添加排片
@@ -224,6 +232,7 @@ const Arrangements = (props: any) => {
               key: v.arrangementID,
             })) as IRecordData[]
           }
+          size="middle"
         />
       </div>
 
@@ -233,8 +242,17 @@ const Arrangements = (props: any) => {
         onClose={() => setAddModalVisible(false)}
         width={512}
       >
-        <Form form={addForm} onFinish={onAddSubmit}>
-          <Form.Item name="IMDb" label="影片">
+        <Form
+          form={addForm}
+          onFinish={onAddSubmit}
+          labelCol={{ span: 6 }}
+          labelAlign="left"
+        >
+          <Form.Item
+            name="IMDb"
+            label="影片"
+            rules={[{ required: true, message: '请选择影片！' }]}
+          >
             <Select placeholder="点击选择影片">
               {admin.filmsData.map((v) => (
                 <Select.Option value={v.IMDb} key={v.IMDb}>
@@ -244,7 +262,11 @@ const Arrangements = (props: any) => {
             </Select>
           </Form.Item>
 
-          <Form.Item name="hallID" label="放映厅">
+          <Form.Item
+            name="hallID"
+            label="放映厅"
+            rules={[{ required: true, message: '请选择放映厅！' }]}
+          >
             <Select placeholder="点击选择放映厅">
               {admin.hallsData.map((v) => (
                 <Select.Option value={v.hallID} key={v.hallID}>
@@ -254,10 +276,19 @@ const Arrangements = (props: any) => {
             </Select>
           </Form.Item>
 
-          <Form.Item name="time" label="放映时间">
+          <Form.Item
+            name="time"
+            label="放映时间"
+            rules={[{ required: true, message: '请选择放映时间！' }]}
+          >
             <DatePicker showTime showMinute format="YYYY-MM-DD HH:mm" />
           </Form.Item>
-          <Form.Item name="price" label="票价">
+
+          <Form.Item
+            name="price"
+            label="票价"
+            rules={[{ required: true, message: '请选择票价！' }]}
+          >
             <Input type="number" addonAfter="元" />
           </Form.Item>
 

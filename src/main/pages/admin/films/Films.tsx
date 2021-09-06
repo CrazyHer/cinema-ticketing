@@ -180,6 +180,9 @@ const Films = (props: any) => {
     }
     return false;
   };
+  const handlePhotosDelete = (index: number) => {
+    setPhotosSrcList(photosSrcList.filter((v, i) => i !== index));
+  };
 
   const columns: ColumnsType<IRecordData> = [
     { title: 'IMDb', dataIndex: 'IMDb' },
@@ -205,8 +208,8 @@ const Films = (props: any) => {
   ];
 
   return (
-    <div>
-      <div className={Style.btn}>
+    <div className={Style.body}>
+      <div className={Style.btn} style={{ float: 'right' }}>
         <Button type="primary" onClick={() => handleAdd()}>
           添加电影
         </Button>
@@ -216,6 +219,7 @@ const Films = (props: any) => {
           loading={loading}
           columns={columns}
           dataSource={admin.filmsData?.map((v) => ({ ...v, key: v.IMDb }))}
+          size="middle"
         />
       </div>
 
@@ -225,13 +229,22 @@ const Films = (props: any) => {
         onClose={() => setModifyModalVisible(false)}
         width={512}
       >
-        <Form form={modifyForm} onFinish={onModifySubmit}>
-          <Form.Item name="IMDb" label="IMDb">
+        <Form
+          form={modifyForm}
+          onFinish={onModifySubmit}
+          labelCol={{ span: 6 }}
+          labelAlign="left"
+        >
+          <Form.Item
+            name="IMDb"
+            label="IMDb"
+            rules={[{ required: true, message: '请输入IMDb号！' }]}
+          >
             <Input disabled />
           </Form.Item>
 
           <Form.Item name="posterURL" hidden />
-          <Form.Item label="电影海报">
+          <Form.Item label="电影海报" required>
             <div className="posterUpload">
               <Upload
                 prefixCls="image"
@@ -239,39 +252,69 @@ const Films = (props: any) => {
                 listType="picture-card"
                 showUploadList={false}
               >
-                {posterSrc ? (
-                  <img
-                    width="128px"
-                    height="128px"
-                    src={posterSrc}
-                    alt="图片预览"
-                  />
-                ) : (
-                  '+ 上传图片'
-                )}
+                <Button type="link" style={{ width: '128px', height: '128px' }}>
+                  {posterSrc ? (
+                    <img
+                      src={posterSrc}
+                      width="128px"
+                      height="128px"
+                      alt="图片预览"
+                    />
+                  ) : (
+                    '+ 上传图片'
+                  )}
+                </Button>
               </Upload>
             </div>
           </Form.Item>
 
-          <Form.Item name="zhName" label="中文名称">
+          <Form.Item
+            name="zhName"
+            label="中文名称"
+            rules={[{ required: true, message: '请输入中文名称！' }]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item name="enName" label="英文名称">
+          <Form.Item
+            name="enName"
+            label="英文名称"
+            rules={[{ required: true, message: '请输入英文名称！' }]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item name="type" label="类型">
+          <Form.Item
+            name="type"
+            label="类型"
+            rules={[{ required: true, message: '请输入电影类型！' }]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item name="country" label="制片地">
+          <Form.Item
+            name="country"
+            label="制片地"
+            rules={[{ required: true, message: '请输入制片国家/地区！' }]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item name="duration" label="时长">
+          <Form.Item
+            name="duration"
+            label="时长"
+            rules={[{ required: true, message: '请输入电影时长！' }]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item name="actor" label="演职人员">
+          <Form.Item
+            name="actor"
+            label="演职人员"
+            rules={[{ required: true, message: '请输入演职人员！' }]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item name="breif" label="剧情简介">
+          <Form.Item
+            name="breif"
+            label="剧情简介"
+            rules={[{ required: true, message: '请输入剧情简介！' }]}
+          >
             <Input />
           </Form.Item>
 
@@ -279,13 +322,14 @@ const Films = (props: any) => {
           <Form.Item label="剧照">
             <div className="photosUpload">
               {photosSrcList?.map((v, i) => (
-                <img
+                <Button
                   key={i}
-                  width="128px"
-                  height="128px"
-                  src={v}
-                  alt="图片预览"
-                />
+                  onClick={() => handlePhotosDelete(i)}
+                  type="text"
+                  style={{ width: '128px', height: '128px' }}
+                >
+                  <img width="128px" height="128px" src={v} alt="图片预览" />
+                </Button>
               ))}
               <Upload
                 prefixCls="image"
@@ -293,7 +337,7 @@ const Films = (props: any) => {
                 listType="picture-card"
                 showUploadList={false}
               >
-                + 上传图片
+                <Button type="link">+ 上传图片</Button>
               </Upload>
             </div>
           </Form.Item>
@@ -312,13 +356,22 @@ const Films = (props: any) => {
         onClose={() => setAddModalVisible(false)}
         width={512}
       >
-        <Form form={addForm} onFinish={onAddSubmit}>
-          <Form.Item name="IMDb" label="IMDb">
+        <Form
+          form={addForm}
+          onFinish={onAddSubmit}
+          labelCol={{ span: 6 }}
+          labelAlign="left"
+        >
+          <Form.Item
+            name="IMDb"
+            label="IMDb"
+            rules={[{ required: true, message: '请输入IMDb号！' }]}
+          >
             <Input />
           </Form.Item>
 
           <Form.Item name="posterURL" hidden />
-          <Form.Item label="电影海报">
+          <Form.Item label="电影海报" required>
             <div className="posterUpload">
               <Upload
                 prefixCls="image"
@@ -326,53 +379,84 @@ const Films = (props: any) => {
                 listType="picture-card"
                 showUploadList={false}
               >
-                {posterSrc ? (
-                  <img
-                    width="128px"
-                    height="128px"
-                    src={posterSrc}
-                    alt="图片预览"
-                  />
-                ) : (
-                  '+ 上传图片'
-                )}
+                <Button type="link" style={{ width: '128px', height: '128px' }}>
+                  {posterSrc ? (
+                    <img
+                      src={posterSrc}
+                      width="128px"
+                      height="128px"
+                      alt="图片预览"
+                    />
+                  ) : (
+                    '+ 上传图片'
+                  )}
+                </Button>
               </Upload>
             </div>
           </Form.Item>
 
-          <Form.Item name="zhName" label="中文名称">
+          <Form.Item
+            name="zhName"
+            label="中文名称"
+            rules={[{ required: true, message: '请输入中文名称！' }]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item name="enName" label="英文名称">
+          <Form.Item
+            name="enName"
+            label="英文名称"
+            rules={[{ required: true, message: '请输入英文名称！' }]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item name="type" label="类型">
+          <Form.Item
+            name="type"
+            label="类型"
+            rules={[{ required: true, message: '请输入电影类型！' }]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item name="country" label="制片地">
+          <Form.Item
+            name="country"
+            label="制片地"
+            rules={[{ required: true, message: '请输入制片国家/地区！' }]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item name="duration" label="时长">
+          <Form.Item
+            name="duration"
+            label="时长"
+            rules={[{ required: true, message: '请输入电影时长！' }]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item name="actor" label="演职人员">
+          <Form.Item
+            name="actor"
+            label="演职人员"
+            rules={[{ required: true, message: '请输入演职人员！' }]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item name="breif" label="剧情简介">
+          <Form.Item
+            name="breif"
+            label="剧情简介"
+            rules={[{ required: true, message: '请输入剧情简介！' }]}
+          >
             <Input />
           </Form.Item>
 
           <Form.Item name="photosURL" hidden />
           <Form.Item label="剧照">
             <div className="photosUpload">
-              {photosSrcList.map((v, i) => (
-                <img
+              {photosSrcList?.map((v, i) => (
+                <Button
                   key={i}
-                  width="128px"
-                  height="128px"
-                  src={v}
-                  alt="图片预览"
-                />
+                  onClick={() => handlePhotosDelete(i)}
+                  type="text"
+                  style={{ width: '128px', height: '128px' }}
+                >
+                  <img width="128px" height="128px" src={v} alt="图片预览" />
+                </Button>
               ))}
               <Upload
                 prefixCls="image"
@@ -380,14 +464,14 @@ const Films = (props: any) => {
                 listType="picture-card"
                 showUploadList={false}
               >
-                + 上传图片
+                <Button type="link">+ 上传图片</Button>
               </Upload>
             </div>
           </Form.Item>
 
           <Form.Item>
-            <Button htmlType="submit" loading={submitLoading}>
-              提交修改
+            <Button htmlType="submit" type="primary" loading={submitLoading}>
+              添加电影
             </Button>
           </Form.Item>
         </Form>

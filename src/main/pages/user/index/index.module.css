@@ -1,3 +1,6 @@
+.body h2 {
+  margin-left: 20px;
+}
 .contentStyle {
   height: 160px;
   color: #fff;
@@ -8,6 +11,27 @@
 .carousel {
   width: 95%;
   margin: 0 auto;
+  margin-bottom: 20px;
+}
+.carouselItem {
+  height: 320px;
+  width: 100%;
+  object-fit: cover;
+  margin: 0 auto;
+}
+
+.rankList {
+  margin-top: -20px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.rankList > * {
+  margin: 20px;
+}
+.rankList img {
+  object-fit: cover;
+  height: 300px;
 }
 
 :global(.ant-carousel:hover .slick-prev) {

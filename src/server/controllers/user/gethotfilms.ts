@@ -3,6 +3,7 @@ import authToken from '../../services/authToken';
 import getFilmBoxOffice from '../../services/getFilmBoxOffice';
 import mysql from '../../utils/mysql';
 import { Models } from '../../utils/rapper';
+import { servername } from '../../config.json';
 
 const querystr = `
 select * from film
@@ -25,9 +26,9 @@ export default async (ctx: Context) => {
         IMDb: v.IMDb,
         name: v.zh_name,
         popularity: filmBoxOffices[v.IMDb] || 0,
-        posterURL: v.poster_url,
+        posterURL: `${servername}/${v.poster_url}`,
       }))
-      .sort((a, b) => a.popularity - b.popularity);
+      .sort((a, b) => b.popularity - a.popularity);
     body.code = 0;
     body.message = 'success';
   } catch (error) {

@@ -82,16 +82,18 @@ const Index = (props: any) => {
   };
   return (
     <div className={Style.body}>
-      <Card>
-        <Statistic title="总用户数" value={data?.users} loading={loading} />
-      </Card>
-      <Card>
-        <Statistic
-          title="总销售额 (元)"
-          value={data?.sales}
-          loading={loading}
-        />
-      </Card>
+      <div className={Style.numCard}>
+        <Card>
+          <Statistic title="总用户数" value={data?.users} loading={loading} />
+        </Card>
+        <Card>
+          <Statistic
+            title="总销售额 (元)"
+            value={data?.sales}
+            loading={loading}
+          />
+        </Card>
+      </div>
       <Card loading={loading} title="每日销售额 (元)">
         <Line {...dailySalesConfig} />
       </Card>

@@ -4,7 +4,7 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable react/display-name */
-import { Carousel, message, Skeleton, Table } from 'antd';
+import { Carousel, message, Popover, Skeleton, Table } from 'antd';
 import Button from 'antd/es/button';
 import Modal from 'antd/lib/modal/Modal';
 import { ColumnsType } from 'antd/lib/table';
@@ -64,7 +64,7 @@ const FilmDetail = (props: any) => {
     { row: number; line: number }[]
   >([]);
   const [payLoading, setPayLoading] = useState(false);
-
+  const [refresh, setRefresh] = useState(false);
   const IMDb = new URLSearchParams(useLocation().search).get('IMDb');
 
   useEffect(() => {
@@ -86,7 +86,7 @@ const FilmDetail = (props: any) => {
           setLoading(false);
         });
     }
-  }, []);
+  }, [refresh]);
 
   const handleTicketingClick = (record: IRecordData) => {
     setModalData(record);
@@ -132,6 +132,7 @@ const FilmDetail = (props: any) => {
         message.error(`购票失败,请求异常`);
       } finally {
         // 不论如何，最后清空状态
+        setRefresh(!refresh);
         setPayLoading(false);
         setModalData(undefined);
         setSelectedSeats([]);
@@ -139,11 +140,59 @@ const FilmDetail = (props: any) => {
     }
   };
 
+  const renderSeatInfo = (value: any, record: IRecordData) => {
+    let count = 0; // 座位总数
+    let used = 0; // 上座人数
+    for (let i = 0; i < record.seats.length; i += 1) {
+      for (let j = 0; j < record.seats[i].length; j += 1) {
+        if (record.seats[i][j] === 2) {
+          used += 1;
+        }
+        if (record.seats[i][j] !== 0) {
+          count += 1;
+        }
+      }
+    }
+    return (
+      <Popover
+        content={
+          <div className={Style.seatInfoWrapper}>
+            <div className={Style.screen}>屏幕中央</div>
+            {record.seats.map((v, i) => (
+              <div key={i} className={Style.seatRow}>
+                {v.map((sv, si) => (
+                  <div key={si}>
+                    {sv === 0 ? (
+                      <IconFont type="icon-SeatDisabled" />
+                    ) : sv === 1 ? (
+                      <IconFont type="icon-SeatAvailable" />
+                    ) : (
+                      <IconFont type="icon-SeatDefault" />
+                    )}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        }
+        title="座位情况"
+      >
+        {used} / {count}
+      </Popover>
+    );
+  };
+
   const columns: ColumnsType<IRecordData> = [
     { title: '电影院', dataIndex: 'cinema', align: 'center' },
     { title: '放映厅', dataIndex: 'hall', align: 'center' },
     { title: '放映时间', dataIndex: 'time', align: 'center' },
-    { title: '座位情况', dataIndex: 'seats', align: 'center' },
+    {
+      title: '座位情况',
+      dataIndex: 'seats',
+      align: 'center',
+      render: renderSeatInfo,
+    },
+
     { title: '票价', dataIndex: 'price', align: 'center' },
     {
       title: '操作',
@@ -160,31 +209,43 @@ const FilmDetail = (props: any) => {
     <Skeleton loading={loading}>
       <div>
         <div className={Style.detailWrapper}>
-          <img className={Style.poster} src={data?.posterURL} alt="海报" />
-          <div className={Style.title}>
-            <h2>{data?.zhName}</h2>
-            <h2>{data?.enName}</h2>
+          <div className={Style.filmInfo}>
+            <img className={Style.poster} src={data?.posterURL} alt="海报" />
+            <div className={Style.wordsWrapper}>
+              <div className={Style.title}>
+                <h2>{data?.zhName}</h2>
+                <p>{data?.enName}</p>
+              </div>
+              <div className={Style.description}>
+                <p>类型：{data?.type}</p>
+                <p>片长：{data?.duration}</p>
+                <p>票房：{data?.boxOffice}</p>
+                <p>制片地: {data?.country}</p>
+                <p>演职人员：{data?.actor}</p>
+              </div>
+            </div>
           </div>
-          <div className={Style.description}>
-            <p>类型：{data?.type}</p>
-            <p>制片地: {data?.country}</p>
-            <p>片长：{data?.duration}</p>
-            <p>演职人员：{data?.actor}</p>
-            <p>票房：{data?.boxOffice}</p>
-          </div>
+
           <div className={Style.breif}>
             <h3>剧情简介</h3>
             <p>{data?.breif}</p>
           </div>
+
           <div className={Style.photos}>
             <h3>剧照</h3>
-            <Carousel autoplay>
+            <Carousel autoplay className={Style.carousel}>
               {data?.photosURL.map((v, i) => (
-                <img key={i} className={Style.photos} src={v} alt="剧照" />
+                <img
+                  key={i}
+                  className={Style.carouselItem}
+                  src={v}
+                  alt="剧照"
+                />
               ))}
             </Carousel>
           </div>
         </div>
+
         <div className={Style.arrangementsWrapper}>
           <h3>排片列表</h3>
           <Table<IRecordData>
@@ -195,8 +256,10 @@ const FilmDetail = (props: any) => {
             }))}
             bordered={false}
             columns={columns}
+            size="middle"
           />
         </div>
+
         <div>
           <Modal
             title="选座购票"
@@ -210,7 +273,8 @@ const FilmDetail = (props: any) => {
             }}
           >
             <div className={Style.modal}>
-              <div className={Style.pickSeat}>
+              <div className={Style.seatInfoWrapper}>
+                <div className={Style.screen}>屏幕中央</div>
                 {modalData?.seats.map((v, i) => (
                   <div key={i} className={Style.seatRow}>
                     {v.map((sv, si) => (
@@ -229,19 +293,23 @@ const FilmDetail = (props: any) => {
                   </div>
                 ))}
               </div>
-              <div className={Style.listInfo}>
+              <div>
                 您选择了：
-                {selectedSeats.map((v, i) => (
-                  <div key={i}>
-                    第{v.row + 1}排第{v.line + 1}座
-                    {i !== selectedSeats.length - 1 && ','}
-                  </div>
-                ))}
-                共{modalData && selectedSeats.length * modalData?.price}元
+                <div className={Style.listInfo}>
+                  {selectedSeats.map((v, i) => (
+                    <div key={i}>
+                      第{v.row + 1}排第{v.line + 1}座
+                      {i !== selectedSeats.length - 1 && ','}
+                    </div>
+                  ))}
+                </div>
+                共{modalData && selectedSeats.length * modalData?.price}
+                元
+                <br />
+                <Button loading={payLoading} type="primary" onClick={handlePay}>
+                  支付
+                </Button>
               </div>
-              <Button loading={payLoading} type="primary" onClick={handlePay}>
-                支付
-              </Button>
             </div>
           </Modal>
         </div>

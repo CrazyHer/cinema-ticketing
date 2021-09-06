@@ -12,7 +12,7 @@
 }
 .header > span {
   height: 1px;
-  width: 630px;
+  width: 27%;
   border-top: solid thin;
   color: #c9c9c9;
   margin: 0 60px 0 60px;
@@ -28,8 +28,9 @@
   margin-top: 130px;
 }
 
-.content > img {
-  height: 100px;
+.icon {
+  margin-left: 50px;
+  height: 200px;
 }
 
 .loginFrame {

@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 import User from '../../../mobxStore/user';
 import { fetch } from '../../../rapper';
+import Style from './CinemaEdit.module.css';
 
 interface IFormData {
   username: string;
@@ -36,7 +37,7 @@ const CinemaEdit = (props: any) => {
         if (userInfoRes.code === 0) {
           message.success('修改成功');
         } else {
-          message.error(`修改失败,${res.message}`);
+          message.error(`修改失败,${userInfoRes.message}`);
         }
       } else {
         message.error(`修改失败,${res.message}`);
@@ -53,10 +54,12 @@ const CinemaEdit = (props: any) => {
   };
 
   return (
-    <div>
+    <div className={Style.body}>
       <Form
         form={form}
         onFinish={handleSubmit}
+        labelCol={{ span: 6 }}
+        labelAlign="left"
         initialValues={{
           username: user.username,
           email: user.email,
@@ -115,7 +118,7 @@ const CinemaEdit = (props: any) => {
 
         <Form.Item>
           <Button
-            className="userinfo-btn"
+            className={Style.btn}
             type="primary"
             htmlType="submit"
             loading={loading}
@@ -123,7 +126,7 @@ const CinemaEdit = (props: any) => {
             提交修改
           </Button>
           <Button
-            className="userinfo-btn"
+            className={Style.btn}
             type="default"
             onClick={handleCancle}
             disabled={loading}

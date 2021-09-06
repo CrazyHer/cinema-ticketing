@@ -6,6 +6,7 @@ import { LeftOutlined } from '@ant-design/icons';
 import User from '../../mobxStore/user';
 import { fetch } from '../../rapper';
 import Style from './Layout.module.css';
+import filmIcon from '../../assets/filmIcon.svg';
 
 const { Header, Content, Sider } = Layout;
 
@@ -74,7 +75,7 @@ const HLayout = (props: any) => {
         >
           <div className={Style.header}>
             <div className={Style.title}>
-              <img alt="LOGO" />
+              <img src={filmIcon} alt="LOGO" />
               <h1>
                 <b>山票票影城管理中心</b>
               </h1>
@@ -85,10 +86,8 @@ const HLayout = (props: any) => {
                 overlayStyle={{ position: 'fixed' }}
                 overlay={
                   <Menu>
-                    <Menu.Item key="logoff">
-                      <Button onClick={handleLogoff} type="text">
-                        退出登录
-                      </Button>
+                    <Menu.Item key="logoff" onClick={handleLogoff}>
+                      <Button type="text">退出登录</Button>
                     </Menu.Item>
                   </Menu>
                 }
@@ -150,7 +149,7 @@ const HLayout = (props: any) => {
                 onClick={() => history.goBack()}
               />
             )}
-            <img alt="LOGO" />
+            <img src={filmIcon} alt="LOGO" />
             <h1>
               <b>山票票影城购票系统</b>
             </h1>
@@ -161,28 +160,20 @@ const HLayout = (props: any) => {
               overlayStyle={{ position: 'fixed' }}
               overlay={
                 <Menu>
-                  <Menu.Item key="editUserInfo">
-                    <Button
-                      onClick={() => {
-                        history.push('/user/profileedit');
-                      }}
-                      type="text"
-                    >
-                      修改个人信息
-                    </Button>
+                  <Menu.Item
+                    key="editUserInfo"
+                    onClick={() => history.push('/user/profileedit')}
+                  >
+                    <Button type="text">修改个人信息</Button>
                   </Menu.Item>
-                  <Menu.Item key="orders">
-                    <Button
-                      onClick={() => history.push('/user/orders')}
-                      type="text"
-                    >
-                      我的订单
-                    </Button>
+                  <Menu.Item
+                    key="orders"
+                    onClick={() => history.push('/user/orders')}
+                  >
+                    <Button type="text">我的订单</Button>
                   </Menu.Item>
-                  <Menu.Item key="logoff">
-                    <Button onClick={handleLogoff} type="text">
-                      退出登录
-                    </Button>
+                  <Menu.Item key="logoff" onClick={handleLogoff}>
+                    <Button type="text">退出登录</Button>
                   </Menu.Item>
                 </Menu>
               }

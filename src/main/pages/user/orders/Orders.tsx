@@ -112,7 +112,7 @@ const Orders = (props: any) => {
   ];
 
   return (
-    <div>
+    <div className={Style.body}>
       <h2>我的订单</h2>
       <div className={Style.table}>
         <Table<IRecordData>
@@ -120,6 +120,7 @@ const Orders = (props: any) => {
           dataSource={data?.map((v) => ({ ...v, key: v.orderID }))}
           columns={columns}
           pagination={{ pageSize: 10, hideOnSinglePage: true }}
+          size="middle"
         />
       </div>
     </div>

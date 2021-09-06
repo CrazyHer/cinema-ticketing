@@ -3,22 +3,13 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/display-name */
-import {
-  Drawer,
-  message,
-  Table,
-  Button,
-  Form,
-  Input,
-  Upload,
-  Popover,
-} from 'antd';
+import { Drawer, message, Table, Button, Form, Input, Popover } from 'antd';
 import { ColumnsType } from 'antd/es/table/interface';
 import { useForm } from 'antd/lib/form/Form';
 import { inject, observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import { createFromIconfontCN } from '@ant-design/icons';
-import { fetch, Models } from '../../../rapper';
+import { fetch } from '../../../rapper';
 import Style from './Hall.module.css';
 import Admin from '../../../mobxStore/admin';
 
@@ -192,23 +183,21 @@ const Halls = (props: any) => {
     }
   };
 
-  const columns: ColumnsType<IRecordData> = [
-    { title: '放映厅名称', dataIndex: 'hallName' },
-    {
-      title: '座位情况',
-      dataIndex: 'seats',
-      render: (value, record) => {
-        let count = 0; // 座位总数
-        for (let i = 0; i < record.seats.length; i += 1) {
-          for (let j = 0; j < record.seats[i].length; j += 1) {
-            if (record.seats[i][j] !== 0) {
-              count += 1;
-            }
-          }
+  const renderSeatInfo = (value: any, record: IRecordData) => {
+    let count = 0; // 座位总数
+    for (let i = 0; i < record.seats.length; i += 1) {
+      for (let j = 0; j < record.seats[i].length; j += 1) {
+        if (record.seats[i][j] !== 0) {
+          count += 1;
         }
-        return (
-          <Popover
-            content={record.seats.map((v, i) => (
+      }
+    }
+    return (
+      <Popover
+        content={
+          <div className={Style.seatInfoWrapper}>
+            <div className={Style.screen}>屏幕中央</div>
+            {record.seats.map((v, i) => (
               <div key={i} className={Style.seatRow}>
                 {v.map((sv, si) => (
                   <div key={si}>
@@ -221,12 +210,21 @@ const Halls = (props: any) => {
                 ))}
               </div>
             ))}
-            title="座位排布"
-          >
-            {count}座
-          </Popover>
-        );
-      },
+          </div>
+        }
+        title="座位情况"
+      >
+        {count}座
+      </Popover>
+    );
+  };
+
+  const columns: ColumnsType<IRecordData> = [
+    { title: '放映厅名称', dataIndex: 'hallName' },
+    {
+      title: '座位情况',
+      dataIndex: 'seats',
+      render: renderSeatInfo,
     },
     { title: '备注', dataIndex: 'comment' },
 
@@ -246,7 +244,7 @@ const Halls = (props: any) => {
   ];
 
   return (
-    <div>
+    <div className={Style.body}>
       <div className={Style.btn}>
         <Button type="primary" onClick={() => handleAdd()}>
           添加放映厅
@@ -262,6 +260,7 @@ const Halls = (props: any) => {
               key: v.hallID,
             })) as IRecordData[]
           }
+          size="middle"
         />
       </div>
 
@@ -271,8 +270,17 @@ const Halls = (props: any) => {
         onClose={() => setAddModalVisible(false)}
         width={512}
       >
-        <Form form={addForm} onFinish={onAddSubmit}>
-          <Form.Item name="hallName" label="放映厅名称">
+        <Form
+          form={addForm}
+          onFinish={onAddSubmit}
+          labelCol={{ span: 6 }}
+          labelAlign="left"
+        >
+          <Form.Item
+            name="hallName"
+            label="放映厅名称"
+            rules={[{ required: true, message: '请输入放映厅名称！' }]}
+          >
             <Input />
           </Form.Item>
 
@@ -280,9 +288,10 @@ const Halls = (props: any) => {
             <Input />
           </Form.Item>
 
-          <Form.Item label="座位编排">
+          <Form.Item label="座位编排" required>
             <div className={Style.setSeats}>
-              <div className={Style.setSeatsGraph}>
+              <div className={Style.seatInfoWrapper}>
+                <div className={Style.screen}>屏幕中央</div>
                 {seats.map((v, i) => (
                   <div key={i} className={Style.seatRow}>
                     {v.map((sv, si) => (
@@ -317,7 +326,7 @@ const Halls = (props: any) => {
           </Form.Item>
 
           <Form.Item>
-            <Button htmlType="submit" loading={submitLoading}>
+            <Button htmlType="submit" loading={submitLoading} type="primary">
               提交修改
             </Button>
           </Form.Item>
@@ -330,16 +339,30 @@ const Halls = (props: any) => {
         onClose={() => setModifyModalVisible(false)}
         width={512}
       >
-        <Form form={modifyForm} onFinish={onModifySubmit}>
+        <Form
+          form={modifyForm}
+          onFinish={onModifySubmit}
+          labelCol={{ span: 6 }}
+          labelAlign="left"
+        >
           <Form.Item name="hallID" hidden />
 
-          <Form.Item name="hallName" label="放映厅名称">
+          <Form.Item
+            name="hallName"
+            label="放映厅名称"
+            rules={[{ required: true, message: '请输入放映厅名称！' }]}
+          >
             <Input />
           </Form.Item>
 
-          <Form.Item label="座位编排">
+          <Form.Item name="comment" label="备注">
+            <Input />
+          </Form.Item>
+
+          <Form.Item label="座位编排" required>
             <div className={Style.setSeats}>
-              <div className={Style.setSeatsGraph}>
+              <div className={Style.seatInfoWrapper}>
+                <div className={Style.screen}>屏幕中央</div>
                 {seats.map((v, i) => (
                   <div key={i} className={Style.seatRow}>
                     {v.map((sv, si) => (
@@ -373,12 +396,8 @@ const Halls = (props: any) => {
             </div>
           </Form.Item>
 
-          <Form.Item name="comment" label="备注">
-            <Input />
-          </Form.Item>
-
           <Form.Item>
-            <Button htmlType="submit" loading={submitLoading}>
+            <Button htmlType="submit" loading={submitLoading} type="primary">
               提交修改
             </Button>
           </Form.Item>

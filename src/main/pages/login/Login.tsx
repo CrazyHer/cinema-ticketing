@@ -8,6 +8,7 @@ import crypto from 'crypto';
 import User, { ILoginFormData } from '../../mobxStore/user';
 import { fetch } from '../../rapper';
 import Style from './Login.module.css';
+import filmIcon from '../../assets/filmIcon.svg';
 
 interface IRegisterFormData {
   userID: string;
@@ -102,11 +103,12 @@ const Login = (props: any) => {
     <div className={Style.body}>
       <div className={Style.header}>
         <span />
-        <h1>欢迎登录</h1>
+        <h1>山票票影城售票系统</h1>
         <span />
       </div>
       <div className={Style.content}>
-        <img alt="LOGO" />
+        <img className={Style.icon} alt="山票票" src={filmIcon} />
+
         <div className={Style.loginFrame}>
           {isRegisterForm ? (
             <Form
@@ -155,8 +157,7 @@ const Login = (props: any) => {
                       if (!value || getFieldValue('password') === value) {
                         return Promise.resolve();
                       }
-                      // eslint-disable-next-line prefer-promise-reject-errors
-                      return Promise.reject('重复密码输入不符！');
+                      return Promise.reject(new Error('重复密码输入不符！'));
                     },
                   }),
                 ]}
@@ -216,7 +217,7 @@ const Login = (props: any) => {
 
               <Form.Item>
                 <Button
-                  style={{ width: '100%' }}
+                  style={{ width: '100%', marginTop: '15px' }}
                   type="primary"
                   htmlType="submit"
                   className={Style['login-form-button']}

@@ -42,5 +42,5 @@ export default async (
       price: Number(row.price),
       arrangementID: row.arrangementID,
     }))
-    .filter((v) => moment(v.time).unix > moment().unix);
+    .filter((v) => moment(v.time, 'YYYY-MM-DD HH:mm').unix() > moment().unix());
 };

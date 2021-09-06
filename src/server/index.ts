@@ -60,7 +60,6 @@ const appExit = async (code = 0) => {
   process.exit(code);
 };
 
-process.on('SIGKILL', () => appExit(0));
 process.on('SIGINT', () => appExit(0));
 
 app().catch((err) => {

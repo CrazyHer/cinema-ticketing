@@ -1,0 +1,8 @@
+.numCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.numCard > * {
+  width: 100%;
+}

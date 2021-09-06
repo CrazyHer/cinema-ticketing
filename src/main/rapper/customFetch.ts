@@ -3,7 +3,7 @@ import { overrideFetch } from '.';
 
 // 使用axios重写请求方法
 const customFetch = (token: string) => {
-  const baseURL = 'http://localhost:2333';
+  const baseURL = 'https://api.herui.club/filmticketing';
   overrideFetch(
     ({ url, method, params }) =>
       new Promise<any>((resolve, reject) => {

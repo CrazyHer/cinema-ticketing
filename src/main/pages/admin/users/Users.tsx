@@ -127,7 +127,7 @@ const Users = (props: any) => {
   ];
 
   return (
-    <div>
+    <div className={Style.body}>
       <div className={Style.btn}>
         <Button type="primary" onClick={() => handleAdd()}>
           添加分店管理员
@@ -141,6 +141,7 @@ const Users = (props: any) => {
             ...v,
             key: v.userID,
           }))}
+          size="middle"
         />
       </div>
 
@@ -150,7 +151,12 @@ const Users = (props: any) => {
         onClose={() => setAddModalVisible(false)}
         width={512}
       >
-        <Form form={addForm} onFinish={onAddSubmit}>
+        <Form
+          form={addForm}
+          onFinish={onAddSubmit}
+          labelCol={{ span: 6 }}
+          labelAlign="left"
+        >
           <Form.Item
             label="新用户账号"
             name="userID"

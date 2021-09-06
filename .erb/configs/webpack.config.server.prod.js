@@ -1,5 +1,4 @@
-import path from 'path';
-import webpackPaths from './webpack.paths.js';
+const webpackPaths = require('./webpack.paths.js');
 
 const { name } = require('../../package.json');
 module.exports = {

@@ -6,6 +6,7 @@ import { useForm } from 'antd/es/form/Form';
 import { useHistory } from 'react-router';
 import User from '../../../mobxStore/user';
 import { fetch } from '../../../rapper';
+import Style from './ProfileEdit.module.css';
 
 interface IFormData {
   imgSrc: string | undefined;
@@ -20,6 +21,8 @@ const ProfileEdit = (props: any) => {
   const [form] = useForm<IFormData>();
   const [loading, setLoading] = useState(false);
   const [imgSrc, setImgSrc] = useState<string>(user.avatarURL);
+  const history = useHistory();
+
   const handleSubmit = async (e: IFormData) => {
     setLoading(true);
     try {
@@ -32,7 +35,17 @@ const ProfileEdit = (props: any) => {
         phone: e.phone,
       });
       if (res.code === 0) {
-        message.success('修改成功');
+        const userInfoRes = await fetch['GET/user/getuserinfo']();
+        user.setUserInfo({
+          ...userInfoRes.data,
+          avatarURL: e.imgSrc || userInfoRes.data.avatarURL,
+        });
+        if (userInfoRes.code === 0) {
+          message.success('修改成功');
+          history.goBack();
+        } else {
+          message.error(`修改失败,${userInfoRes.message}`);
+        }
       } else {
         message.error(`修改失败,${res.message}`);
       }
@@ -75,16 +88,17 @@ const ProfileEdit = (props: any) => {
     return false;
   };
 
-  const history = useHistory();
   const handleCancle = () => {
     history.push('/user');
   };
 
   return (
-    <div>
+    <div className={Style.body}>
       <Form
         form={form}
         onFinish={handleSubmit}
+        labelCol={{ span: 6 }}
+        labelAlign="left"
         initialValues={{
           username: user.username,
           email: user.email,
@@ -92,9 +106,7 @@ const ProfileEdit = (props: any) => {
           address: user.address,
         }}
       >
-        <div>
-          <p style={{ float: 'left' }}>个人头像：</p>
-
+        <Form.Item label="个人头像" required>
           <Upload
             prefixCls="image"
             beforeUpload={handleImgChange}
@@ -107,7 +119,7 @@ const ProfileEdit = (props: any) => {
               '+ 上传头像'
             )}
           </Upload>
-        </div>
+        </Form.Item>
 
         <Form.Item label="昵称" name="username" required>
           <Input />
@@ -162,7 +174,7 @@ const ProfileEdit = (props: any) => {
 
         <Form.Item>
           <Button
-            className="userinfo-btn"
+            className={Style.btn}
             type="primary"
             htmlType="submit"
             loading={loading}
@@ -170,7 +182,7 @@ const ProfileEdit = (props: any) => {
             提交修改
           </Button>
           <Button
-            className="userinfo-btn"
+            className={Style.btn}
             type="default"
             onClick={handleCancle}
             disabled={loading}

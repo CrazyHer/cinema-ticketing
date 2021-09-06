@@ -73,16 +73,17 @@ const Orders = (props: any) => {
   };
 
   const columns: ColumnsType<IRecordData> = [
+    { title: '订单号', dataIndex: 'key', align: 'center' },
     { title: '用户ID', dataIndex: 'userID', align: 'center' },
     { title: '电影名称', dataIndex: 'filmName', align: 'center' },
     { title: '放映厅', dataIndex: 'hall', align: 'center' },
-    { title: '时间', dataIndex: 'time', align: 'center' },
+    { title: '下单时间', dataIndex: 'time', align: 'center' },
     {
       title: '所选座位',
       dataIndex: 'selectedSeats',
       align: 'center',
       render: (value, record) =>
-        record.selectedSeats.map((v) => `${v.row}排${v.line}座 `),
+        record.selectedSeats.map((v) => `${v.row + 1}排${v.line + 1}座 `),
     },
     { title: '支付价格', dataIndex: 'totalPrice', align: 'center' },
     {
@@ -125,6 +126,7 @@ const Orders = (props: any) => {
           dataSource={data?.map((v) => ({ ...v, key: v.orderID }))}
           columns={columns}
           pagination={{ pageSize: 10, hideOnSinglePage: true }}
+          size="middle"
         />
       </div>
     </div>
