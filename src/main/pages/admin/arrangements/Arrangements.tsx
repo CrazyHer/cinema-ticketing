@@ -137,11 +137,11 @@ const Arrangements = (props: any) => {
         message.success(`添加成功`);
         setRefreshData(!refreshData);
       } else {
-        message.success(`添加失败,${res.message}`);
+        message.error(`添加失败,${res.message}`);
       }
     } catch (error) {
       console.error(error);
-      message.success(`添加失败,请求异常`);
+      message.error(`添加失败,请求异常`);
     } finally {
       setAddModalVisible(false);
       setSubmitLoading(false);

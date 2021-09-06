@@ -19,8 +19,9 @@ export default async (ctx: Context) => {
     message: '',
   };
   try {
-    await authToken(token);
+    const myUserID = await authToken(token);
     if (!userID) throw new Error('用户不存在');
+    if (userID === myUserID) throw new Error('无法删除自己');
 
     await mysql.execute(queryDeleteUserStr, [userID]);
     await mysql.execute(queryDeleteOrderStr, [userID]);

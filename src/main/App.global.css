@@ -8,3 +8,6 @@ body {
 * {
   -webkit-user-drag: none;
 }
+img {
+  object-fit: cover;
+}

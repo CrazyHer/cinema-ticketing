@@ -1,6 +1,6 @@
 import Koa from 'koa';
-import cors from 'koa2-cors';
-import koabody from 'koa-body';
+import cors from '@koa/cors';
+import koabody from 'koa-bodyparser';
 import fs from 'fs';
 import path from 'path';
 import serve from 'koa-static';
@@ -20,7 +20,7 @@ const app = async () => {
 
   const koa = new Koa();
   koa.use(cors());
-  koa.use(koabody({ formLimit: '10mb' }));
+  koa.use(koabody({ formLimit: '10mb', jsonLimit: '10mb', textLimit: '10mb' }));
   koa.use(serve(path.join(public_dir, '../')));
 
   // 测试mysql连接

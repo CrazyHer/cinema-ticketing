@@ -85,8 +85,8 @@ const Orders = (props: any) => {
       dataIndex: 'status',
       align: 'center',
       render: (value, record) => {
-        if (value === 0) return '已支付';
-        if (value === 1) return '已完成';
+        if (record.status === 0) return '已支付';
+        if (record.status === 1) return '已完成';
         return '已退票';
       },
     },

@@ -93,11 +93,11 @@ const Films = (props: any) => {
         message.success(`修改成功`);
         setRefreshData(!refreshData);
       } else {
-        message.success(`修改失败,${res.message}`);
+        message.error(`修改失败,${res.message}`);
       }
     } catch (error) {
       console.error(error);
-      message.success(`修改失败,请求异常`);
+      message.error(`修改失败,请求异常`);
     } finally {
       setModifyModalVisible(false);
       setSubmitLoading(false);
@@ -111,11 +111,11 @@ const Films = (props: any) => {
         message.success(`添加成功`);
         setRefreshData(!refreshData);
       } else {
-        message.success(`添加失败,${res.message}`);
+        message.error(`添加失败,${res.message}`);
       }
     } catch (error) {
       console.error(error);
-      message.success(`添加失败,请求异常`);
+      message.error(`添加失败,请求异常`);
     } finally {
       setAddModalVisible(false);
       setSubmitLoading(false);
@@ -308,14 +308,14 @@ const Films = (props: any) => {
             label="演职人员"
             rules={[{ required: true, message: '请输入演职人员！' }]}
           >
-            <Input />
+            <Input.TextArea />
           </Form.Item>
           <Form.Item
             name="breif"
             label="剧情简介"
             rules={[{ required: true, message: '请输入剧情简介！' }]}
           >
-            <Input />
+            <Input.TextArea />
           </Form.Item>
 
           <Form.Item name="photosURL" hidden />
@@ -442,7 +442,7 @@ const Films = (props: any) => {
             label="剧情简介"
             rules={[{ required: true, message: '请输入剧情简介！' }]}
           >
-            <Input />
+            <Input.TextArea />
           </Form.Item>
 
           <Form.Item name="photosURL" hidden />
