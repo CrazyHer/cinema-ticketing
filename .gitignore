@@ -53,7 +53,7 @@ npm-debug.log.*
 *.scss.d.ts
 
 # sensetive server config
-src/server/config.json
+# src/server/config.json
 
 # server public dir
 public
