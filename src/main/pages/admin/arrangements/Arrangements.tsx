@@ -18,15 +18,13 @@ import { ColumnsType } from 'antd/es/table/interface';
 import { useForm } from 'antd/lib/form/Form';
 import { inject, observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
-import { createFromIconfontCN } from '@ant-design/icons';
 import { Moment } from 'moment';
+import SeatDefault from '../../../assets/SeatDefault.svg';
+import SeatDisabled from '../../../assets/SeatDisabled.svg';
+import SeatAvailable from '../../../assets/SeatAvailable.svg';
 import { fetch } from '../../../rapper';
 import Style from './Arrangements.module.css';
 import Admin from '../../../mobxStore/admin';
-
-const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_2764124_m58gtcntoj7.js',
-});
 
 interface IFormData {
   IMDb: string;
@@ -171,11 +169,23 @@ const Arrangements = (props: any) => {
                 {v.map((sv, si) => (
                   <div key={si}>
                     {sv === 0 ? (
-                      <IconFont type="icon-SeatDisabled" />
+                      <img
+                        className="seatIcon"
+                        src={SeatDisabled}
+                        alt="icon-SeatDisabled"
+                      />
                     ) : sv === 1 ? (
-                      <IconFont type="icon-SeatAvailable" />
+                      <img
+                        className="seatIcon"
+                        src={SeatAvailable}
+                        alt="icon-SeatAvailable"
+                      />
                     ) : (
-                      <IconFont type="icon-SeatDefault" />
+                      <img
+                        className="seatIcon"
+                        src={SeatDefault}
+                        alt="icon-SeatDefault"
+                      />
                     )}
                   </div>
                 ))}
@@ -294,7 +304,7 @@ const Arrangements = (props: any) => {
 
           <Form.Item>
             <Button htmlType="submit" loading={submitLoading}>
-              提交修改
+              确认添加
             </Button>
           </Form.Item>
         </Form>

@@ -1,4 +1,4 @@
-/* md5: a908b0f4e750b2782a0ed4fd8d30579c */
+/* md5: 1471b752ed55dea3fe6a6374854f29c1 */
 /* Rap仓库id: 288782 */
 /* Rapper版本: 1.2.2 */
 /* eslint-disable */
@@ -194,6 +194,7 @@ export interface IModels {
          */
         status: number
         orderID: number
+        arrangementTime: string
       }[]
     }
   }

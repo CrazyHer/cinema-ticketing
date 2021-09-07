@@ -11,6 +11,7 @@ type IData = Models['GET/user/getmyorders']['Res']['data'];
 interface IRecordData {
   cinema: string;
   hall: string;
+  arrangementTime: string;
   time: string;
   selectedSeats: { row: number; line: number }[];
   totalPrice: number;
@@ -71,7 +72,8 @@ const Orders = (props: any) => {
   const columns: ColumnsType<IRecordData> = [
     { title: '电影院', dataIndex: 'cinema', align: 'center' },
     { title: '放映厅', dataIndex: 'hall', align: 'center' },
-    { title: '开映时间', dataIndex: 'time', align: 'center' },
+    { title: '开映时间', dataIndex: 'arrangementTime', align: 'center' },
+    { title: '下单时间', dataIndex: 'time', align: 'center' },
     {
       title: '座位',
       dataIndex: 'selectedSeats',

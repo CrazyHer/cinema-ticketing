@@ -8,14 +8,11 @@ import { ColumnsType } from 'antd/es/table/interface';
 import { useForm } from 'antd/lib/form/Form';
 import { inject, observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
-import { createFromIconfontCN } from '@ant-design/icons';
+import SeatDisabled from '../../../assets/SeatDisabled.svg';
+import SeatAvailable from '../../../assets/SeatAvailable.svg';
 import { fetch } from '../../../rapper';
 import Style from './Hall.module.css';
 import Admin from '../../../mobxStore/admin';
-
-const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_2764124_m58gtcntoj7.js',
-});
 
 interface IFormData {
   hallID: number;
@@ -202,9 +199,17 @@ const Halls = (props: any) => {
                 {v.map((sv, si) => (
                   <div key={si}>
                     {sv === 0 ? (
-                      <IconFont type="icon-SeatDisabled" />
+                      <img
+                        className="seatIcon"
+                        src={SeatDisabled}
+                        alt="icon-SeatDisabled"
+                      />
                     ) : (
-                      <IconFont type="icon-SeatAvailable" />
+                      <img
+                        className="seatIcon"
+                        src={SeatAvailable}
+                        alt="icon-SeatAvailable"
+                      />
                     )}
                   </div>
                 ))}
@@ -297,9 +302,17 @@ const Halls = (props: any) => {
                     {v.map((sv, si) => (
                       <div key={si} onClick={() => handleSeatClick(i, si)}>
                         {sv === 0 ? (
-                          <IconFont type="icon-SeatDisabled" />
+                          <img
+                            className="seatIcon"
+                            src={SeatDisabled}
+                            alt="icon-SeatDisabled"
+                          />
                         ) : (
-                          <IconFont type="icon-SeatAvailable" />
+                          <img
+                            className="seatIcon"
+                            src={SeatAvailable}
+                            alt="icon-SeatAvailable"
+                          />
                         )}
                       </div>
                     ))}
@@ -368,9 +381,17 @@ const Halls = (props: any) => {
                     {v.map((sv, si) => (
                       <div key={si} onClick={() => handleSeatClick(i, si)}>
                         {sv === 0 ? (
-                          <IconFont type="icon-SeatDisabled" />
+                          <img
+                            className="seatIcon"
+                            src={SeatDisabled}
+                            alt="icon-SeatDisabled"
+                          />
                         ) : (
-                          <IconFont type="icon-SeatAvailable" />
+                          <img
+                            className="seatIcon"
+                            src={SeatAvailable}
+                            alt="icon-SeatAvailable"
+                          />
                         )}
                       </div>
                     ))}

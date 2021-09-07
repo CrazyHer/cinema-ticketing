@@ -71,11 +71,18 @@ export default async (ctx: Context) => {
       value: v.value,
     }));
 
+    // 获取IMDb和电影名称的映射字典
+    const [filmRows]: any[][] = await mysql.execute('select * from film');
+    const filmIMDbToNames: Record<string, string> = {};
+    for (let i = 0; i < filmRows.length; i += 1) {
+      filmIMDbToNames[filmRows[i].IMDb] = filmRows[i].zh_name;
+    }
+
     // 只统计有票房的电影
     const filmBoxOffices = await getFilmBoxOffice();
     body.data.boxOffice = Object.keys(filmBoxOffices).map((key) => ({
       value: filmBoxOffices[key],
-      filmName: key,
+      filmName: filmIMDbToNames[key],
     }));
 
     const [seatsRows]: any[][] = await mysql.execute(querySeatsStr);

@@ -49,6 +49,7 @@ export default async (ctx: Context) => {
         orderID: row.orderID,
         selectedSeats: JSON.parse(row.selectedSeats),
         status,
+        arrangementTime: row.arrangementTime,
         time: row.time,
         totalPrice: row.totalPrice,
       };

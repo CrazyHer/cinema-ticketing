@@ -11,3 +11,7 @@ body {
 img {
   object-fit: cover;
 }
+.seatIcon {
+  width: 20px;
+  height: 20px;
+}

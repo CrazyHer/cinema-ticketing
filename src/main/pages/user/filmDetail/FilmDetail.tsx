@@ -11,14 +11,13 @@ import { ColumnsType } from 'antd/lib/table';
 import { inject, observer } from 'mobx-react';
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { createFromIconfontCN } from '@ant-design/icons';
+import SeatDefault from '../../../assets/SeatDefault.svg';
+import SeatDisabled from '../../../assets/SeatDisabled.svg';
+import SeatAvailable from '../../../assets/SeatAvailable.svg';
+import SeatSelected from '../../../assets/SeatSelected.svg';
 
 import { fetch } from '../../../rapper';
 import Style from './FilmDetail.module.css';
-
-const IconFont = createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_2764124_m58gtcntoj7.js',
-});
 
 interface IData {
   arrangements: {
@@ -120,7 +119,7 @@ const FilmDetail = (props: any) => {
         const res = await fetch['POST/user/pay']({
           arrangementID: modalData.arrangementID,
           selectedSeats,
-          price: modalData.price,
+          price: modalData.price * selectedSeats.length,
         });
         if (res.code === 0) {
           message.success('购票成功');
@@ -163,11 +162,23 @@ const FilmDetail = (props: any) => {
                 {v.map((sv, si) => (
                   <div key={si}>
                     {sv === 0 ? (
-                      <IconFont type="icon-SeatDisabled" />
+                      <img
+                        className="seatIcon"
+                        src={SeatDisabled}
+                        alt="icon-SeatDisabled"
+                      />
                     ) : sv === 1 ? (
-                      <IconFont type="icon-SeatAvailable" />
+                      <img
+                        className="seatIcon"
+                        src={SeatAvailable}
+                        alt="icon-SeatAvailable"
+                      />
                     ) : (
-                      <IconFont type="icon-SeatDefault" />
+                      <img
+                        className="seatIcon"
+                        src={SeatDefault}
+                        alt="icon-SeatDefault"
+                      />
                     )}
                   </div>
                 ))}
@@ -280,13 +291,29 @@ const FilmDetail = (props: any) => {
                     {v.map((sv, si) => (
                       <div key={si} onClick={() => handleSeatClick(i, si)}>
                         {sv === 0 ? (
-                          <IconFont type="icon-SeatDisabled" />
+                          <img
+                            src={SeatDisabled}
+                            className="seatIcon"
+                            alt="icon-SeatDisabled"
+                          />
                         ) : sv === 1 ? (
-                          <IconFont type="icon-SeatAvailable" />
+                          <img
+                            src={SeatAvailable}
+                            className="seatIcon"
+                            alt="icon-SeatAvailable"
+                          />
                         ) : sv === 2 ? (
-                          <IconFont type="icon-SeatDefault" />
+                          <img
+                            src={SeatDefault}
+                            className="seatIcon"
+                            alt="icon-SeatDefault"
+                          />
                         ) : (
-                          <IconFont type="icon-SeatSelected" />
+                          <img
+                            src={SeatSelected}
+                            className="seatIcon"
+                            alt="icon-SeatSelected"
+                          />
                         )}
                       </div>
                     ))}
