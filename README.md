@@ -11,8 +11,11 @@
 - 生产模式打包为当前平台安装包： `yarn package`
 
 应用程序接口地址在 src/main/rapper/customFetch.ts 中定义
+
 默认为我本人服务器地址，可登录以下账号体验：
+
 账号user1 密码123
+
 账号admin1 密码123
 
 ## 功能清单：
